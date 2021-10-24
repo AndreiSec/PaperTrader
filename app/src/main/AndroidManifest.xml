@@ -6,10 +6,17 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/logo"
+        android:roundIcon="@mipmap/logo_dark_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.PaperTrader">
-        <activity android:name=".EntryActivity">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.PaperTrader.NoActionBar"></activity>
+        <activity
+            android:name=".ui.login.RegisterActivity"
+            android:label="@string/title_activity_signup" />
+        <activity android:name=".ui.login.EntryActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,9 +25,7 @@
         </activity>
         <activity
             android:name=".ui.login.LoginActivity"
-            android:label="@string/app_name">
-
-        </activity>
+            android:label="@string/app_name" />
     </application>
 
 </manifest>

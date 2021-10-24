@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EntryActivity">
+    tools:context=".ui.login.EntryActivity">
 
     <ImageView
         android:id="@+id/image_logo_with_name"
@@ -23,7 +23,7 @@
         app:srcCompat="@mipmap/graph_foreground" />
 
     <Button
-        android:id="@+id/button_signin"
+        android:id="@+id/button_entry_signin"
         android:layout_width="125dp"
         android:layout_height="54dp"
         android:layout_marginStart="72dp"
@@ -40,7 +40,7 @@
         tools:text="@string/action_sign_in_short" />
 
     <Button
-        android:id="@+id/button_register"
+        android:id="@+id/button_entry_register"
         android:layout_width="125dp"
         android:layout_height="54dp"
         android:layout_marginEnd="72dp"
@@ -66,7 +66,7 @@
         android:text="@string/slogan"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/button_signin"
+        app:layout_constraintBottom_toTopOf="@+id/button_entry_signin"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView

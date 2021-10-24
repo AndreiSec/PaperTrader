@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">PaprTrdr</string>
     <!-- Strings related to login screens -->
+    <string name="prompt_username">Username</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
@@ -17,19 +18,31 @@
     <string name="hint_password">Password</string>
     <string name="button_sign_in">Sign in</string>
     <string name="button_sign_up">Sign up</string>
+    <string name="already_member">Already have an account? <b>Sign in</b></string>
     <string name="button_send">Send</string>
+    <string name="password_requirements">Your password must be 8 or more characters long &amp; contain a mix of upper &amp; lower case letters, numbers, &amp; symbols.</string>
+    <string name="register_motto">Create new account</string>
     <string name="text_forgot_password">Forgot password?</string>
     <string name="text_signin_message">Hello, sign in to your account</string>
     <string name="text_signin_social_media">Or Sign in using social media</string>
     <string name="text_signup_social_media">Or Sign up using social media</string>
     <string name="text_signin_signup">Don\'t have an account? <b>Sign up</b></string>
     <string name="text_signup_terms">By signing up, you agree to our <b>terms and conditions</b></string>
-    <string name="text_signup_message">Hello, let\'s set up your account</string>
+    <string name="text_signup_message">Start paper trading.</string>
 
     <string name="text_forgot_password_title">Forgot password? No worries</string>
     <string name="text_forgot_password_message">We will send you a link to reset your password</string>
-
+    <string name="text_logout">Log Out</string>
     <string name="hint_email">Email</string>
     <string name="hint_phone">Phone</string>
     <string name="hint_confirm_password">Confirm Password</string>
+    <string name="title_activity_signup">signup</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+
+    <string name="preference_auth_key">authKey</string>
+    <string name="preference_user_name">userName</string>
+
+
 </resources>

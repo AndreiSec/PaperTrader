@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "970207934158",
+    "project_id": "papertrader-73acd",
+    "storage_bucket": "papertrader-73acd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970207934158:android:0ce60d167250a23b33829f",
+        "android_client_info": {
+          "package_name": "com.example.papertrader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970207934158-rk2g4js2udu8h2i9eqm60n8qfa5c1fn7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCD-dzaBrz9MCqGNFfg_2e9VzkPiXQBZ44"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "970207934158-rk2g4js2udu8h2i9eqm60n8qfa5c1fn7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

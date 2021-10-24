@@ -5,6 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="android:colorPrimary">@color/lightBlue</item>
         <item name="android:colorPrimaryDark">@color/darkBlue</item>
+        <item name="android:statusBarColor">@color/darkBlue</item>
         <item name="android:colorAccent">@color/lightGrey</item>
     </style>
     <style name="AppTheme.NoActionBar">
@@ -28,7 +29,7 @@
     </style>
 
     <style name="splashScreenTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
-        <item name="android:windowBackground">@mipmap/logo</item>
+        <item name="android:windowBackground">@mipmap/logo_dark_foreground</item>
     </style>
 
 
