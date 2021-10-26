@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,7 @@ import com.example.papertrader.R;
 //import com.example.papertrader.data.LoginDataSource;
 //import com.example.papertrader.data.LoginRepository;
 //import com.example.papertrader.data.Result;
+import com.example.papertrader.VerificationEmailSentActivity;
 import com.example.papertrader.data.model.LoggedInUser;
 import com.example.papertrader.ui.login.EntryActivity;
 import com.example.papertrader.ui.login.LoginActivity;
@@ -38,7 +41,17 @@ public class AuthHandler {
 
     FirebaseAuth mAuth;
 
+    private ProgressBar loadingProgressBar;
+    private Context context;
+    private Activity activity;
+
 //    public Context context;
+
+    public AuthHandler(Context context, Activity activity){
+        this.context = context;
+        this.activity = activity;
+
+    }
 
 
     // Username validation check
@@ -107,7 +120,7 @@ public class AuthHandler {
 
 
     // Gets the authentication token from shared preferences
-    public static String getAuthToken(Context context){
+    public String getAuthToken(){
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_auth_key), Context.MODE_PRIVATE);
 
@@ -118,7 +131,7 @@ public class AuthHandler {
     }
 
     // Gets the username from shared preferences
-    public static String getUserName(Context context){
+    public String getUserName(){
 
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_user_name), Context.MODE_PRIVATE);
@@ -131,18 +144,21 @@ public class AuthHandler {
 
 
     // Checks if user is logged in
-    public boolean isLoggedIn(Context context) {
+    public boolean isLoggedIn() {
 
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                context.getString(R.string.preference_auth_key), Context.MODE_PRIVATE);
+        String authKey = getAuthToken();
 
-        String authKey = sharedPref.getString(context.getString(R.string.preference_auth_key), null);
+        if(authKey == null){
+            return false;
+        }
 
-        return authKey != null;
+        return true;
+
+
     }
 
     // Logs user out of the app
-    public void logout(Context context) {
+    public void logout() {
 //        dataSource.logout(context);
 
         SharedPreferences sharedPref = context.getSharedPreferences(
@@ -157,12 +173,12 @@ public class AuthHandler {
         editor.commit();
         Log.i("Alert: ", "Logged out and removed key from shared preferences");
 
-        openEntryActivity(context);
+        openEntryActivity();
     }
 
 
     // Sets the user logged in by caching token in shared preferences
-    private void setLoggedInUserInSharedPreferences(Context context, LoggedInUser user) {
+    private void setLoggedInUserInSharedPreferences(LoggedInUser user) {
 
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_auth_key), Context.MODE_PRIVATE);
@@ -174,11 +190,11 @@ public class AuthHandler {
 
         Log.i("Alert: ", "Set user to logged in by storing auth token");
 
-        openMainActivity(context);
+        openMainActivity();
 
     }
 
-    private static void openMainActivity(Context context){
+    private void openMainActivity(){
         Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
@@ -194,29 +210,76 @@ public class AuthHandler {
 
 
 
-    public static void openEntryActivity(Context context){
+    public void openEntryActivity(){
         Intent intent = new Intent(context, EntryActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
 //        ((Activity) context).finish();
     }
 
-    public void register(Context context, String username, String email, String password) {
+    public void openEmailVerifyActivity(){
+        Intent intent = new Intent(context, VerificationEmailSentActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+//        ((Activity) context).finish();
+    }
+
+    private void sendVerificationEmail(FirebaseUser user)
+    {
+
+        user.sendEmailVerification()
+                .addOnCompleteListener((Activity) context, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            // email sent
+                            // Navigate to sent verification email page
+                            openEmailVerifyActivity();
+
+
+                        }
+                        else
+                        {
+                            // email not sent, so display message and restart the activity or do whatever you wish to do
+
+                            Toast.makeText(context, task.getException().getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
+    }
+
+    public void register(String username, String email, String password) {
         // handle registration
         mAuth = FirebaseAuth.getInstance();
 //        this.context = context;
 
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(((Activity) context), new OnCompleteListener<AuthResult>() {
+        // Set loading circle to visible
+        loadingProgressBar = activity.findViewById(R.id.register_loading_bar);
+        loadingProgressBar.setVisibility(View.VISIBLE);
+
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                // Set loading bar invisible
+                loadingProgressBar.setVisibility(View.INVISIBLE);
+
                 if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
-                    setLoggedInUserInSharedPreferences(context, new LoggedInUser(mAuth.getCurrentUser().getUid(), username));
-                    openMainActivity(context);
+                    // Sign up success, send email verification
+
+                    FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                    sendVerificationEmail(mUser);
+
+
+
+//                    setLoggedInUserInSharedPreferences(new LoggedInUser(mAuth.getCurrentUser().getUid(), username));
+//                    openMainActivity();
 
                 } else {
                     // If sign in fails, display a message to the user.
-                    Toast.makeText(context, "Unable to sign up.",
+                    Toast.makeText(context, task.getException().getMessage(),
                             Toast.LENGTH_SHORT).show();
                 }
 
@@ -226,25 +289,43 @@ public class AuthHandler {
 
     }
 
-    public void login(Context context, String email, String password) {
+    public void login(String email, String password) {
         // handle login
         mAuth = FirebaseAuth.getInstance();
 //        this.context = context;
+
+        // Set loading circle to visible
+        loadingProgressBar = activity.findViewById(R.id.login_loading_bar);
+        loadingProgressBar.setVisibility(View.VISIBLE);
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        // Set loading bar invisible
+                        loadingProgressBar.setVisibility(View.INVISIBLE);
+
+                        FirebaseUser mUser = mAuth.getCurrentUser();
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Toast.makeText(context, "Authentication successful.",
-                                    Toast.LENGTH_SHORT).show();
-                            setLoggedInUserInSharedPreferences(context, new LoggedInUser(mAuth.getCurrentUser().getUid(),"tempUsername"));
-                            openMainActivity(context);
+
+                            if(mUser.isEmailVerified()){
+                                Toast.makeText(context, "Authentication successful.",
+                                        Toast.LENGTH_SHORT).show();
+                                setLoggedInUserInSharedPreferences(new LoggedInUser(mAuth.getCurrentUser().getUid(),"tempUsername"));
+                                openMainActivity();
+                            }
+                            else{
+                                Toast.makeText(context, "Please verify your email!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
+
 
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(context, "Authentication failed.",
+                            Toast.makeText(context, task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
                         }
                     }

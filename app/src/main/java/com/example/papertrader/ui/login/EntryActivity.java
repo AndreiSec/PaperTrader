@@ -25,9 +25,9 @@ public class EntryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        authHandler = new AuthHandler();
+        authHandler = new AuthHandler(this, this);
 
-        if(authHandler.isLoggedIn(getApplicationContext())){
+        if(authHandler.isLoggedIn()){
             Log.i("Alert: ", "Already logged in. Switching to main activity.");
             openMainActivity();
         }

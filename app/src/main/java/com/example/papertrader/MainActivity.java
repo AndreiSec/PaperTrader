@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
 
 
-        authHandler = new AuthHandler();
+        authHandler = new AuthHandler(this, this);
 
 //        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
 //                .get(LoginViewModel.class);
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         logout_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                authHandler.logout(MainActivity.this);
+                authHandler.logout();
 
             }
 

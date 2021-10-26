@@ -67,8 +67,8 @@ public class RegisterActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.textentry_register_email);
         passwordEditText = findViewById(R.id.textentry_register_password);
         final Button registerButton = findViewById(R.id.button_register_register);
-        final ProgressBar loadingProgressBar = findViewById(R.id.loading);
-        authHandler = new AuthHandler();
+
+        authHandler = new AuthHandler(this, this);
 
 //        mAuth = FirebaseAuth.getInstance();
 
@@ -120,12 +120,12 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
+
 
                 registerUser(usernameEditText.getText().toString(),emailEditText.getText().toString(),
                         passwordEditText.getText().toString());
 
-                loadingProgressBar.setVisibility(View.INVISIBLE);
+
                 return;
 //                authHandler.register(getApplicationContext(), usernameEditText.getText().toString(),emailEditText.getText().toString(),
 //                        passwordEditText.getText().toString());
@@ -163,7 +163,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         // If no error occurred, use the AuthHandler to handle registration
 
-        authHandler.register(this, username, email, password);
+        authHandler.register(username, email, password);
 
 
 

@@ -9,10 +9,11 @@
         android:roundIcon="@mipmap/logo_dark_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.PaperTrader">
+        <activity android:name=".VerificationEmailSentActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/Theme.PaperTrader.NoActionBar"></activity>
+            android:theme="@style/Theme.PaperTrader.NoActionBar" />
         <activity
             android:name=".ui.login.RegisterActivity"
             android:label="@string/title_activity_signup" />

@@ -55,9 +55,8 @@ public class LoginActivity extends AppCompatActivity {
        passwordEditText = findViewById(R.id.textentry_signin_password);
 //        passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         final Button loginButton = findViewById(R.id.button_signin_signin);
-        final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
-        authHandler = new AuthHandler();
+        authHandler = new AuthHandler(this, this);
 
         viewPasswordButton = findViewById(R.id.imageView_login_viewPassword);
         viewPasswordButton.setOnClickListener(new View.OnClickListener(){
@@ -97,12 +96,10 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
 
                 loginUser(emailEditText.getText().toString(),
                         passwordEditText.getText().toString());
 
-                loadingProgressBar.setVisibility(View.INVISIBLE);
                 return;
             }
         });
@@ -113,24 +110,24 @@ public class LoginActivity extends AppCompatActivity {
         boolean errorOccurred = false;
 
         FormResult emailResult = AuthHandler.isEmailValid(email);
-        FormResult passwordResult = AuthHandler.isPasswordValid(password);
 
 
         if(!emailResult.result){
             emailEditText.setError(emailResult.message);
             errorOccurred = true;
         }
-        if(!passwordResult.result){
-            passwordEditText.setError(passwordResult.message);
+        if (password.length() == 0) {
+            passwordEditText.setError("Password cannot be blank.");
             errorOccurred = true;
         }
+
 
         // Do not continue with registration if an error occurred.
         if(errorOccurred) return;
 
         // If no error occurred, use the AuthHandler to handle registration
 
-        authHandler.login(this, email, password);
+        authHandler.login(email, password);
 
     }
 

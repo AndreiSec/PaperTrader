@@ -29,6 +29,10 @@
     <string name="text_signin_signup">Don\'t have an account? <b>Sign up</b></string>
     <string name="text_signup_terms">By signing up, you agree to our <b>terms and conditions</b></string>
     <string name="text_signup_message">Start paper trading.</string>
+    <string name="go_to_sign_in">Go to sign in</string>
+
+    <string name="verification_sent_main">Verification email sent.</string>
+    <string name="verification_sent_body">Please check your inbox and follow the link to confirm your email. When that is done, login.</string>
 
     <string name="text_forgot_password_title">Forgot password? No worries</string>
     <string name="text_forgot_password_message">We will send you a link to reset your password</string>
