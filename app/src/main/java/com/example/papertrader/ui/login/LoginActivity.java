@@ -1,45 +1,29 @@
 package com.example.papertrader.ui.login;
 
-import android.app.Activity;
-
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.papertrader.R;
-import com.example.papertrader.ui.login.AuthHandler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     private FloatingActionButton button_back;
 //    private LoginViewModel loginViewModel;
     private AuthHandler authHandler;
     private ImageView viewPasswordButton;
+    private Button forgotPasswordButton;
 
     private EditText emailEditText;
     private EditText passwordEditText;
@@ -103,6 +87,18 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
         });
+
+
+        forgotPasswordButton = findViewById(R.id.button_signin_forgot_password);
+        forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                openForgotPasswordActivity();
+
+            }
+        });
+
     }
 
 
@@ -136,6 +132,12 @@ public class LoginActivity extends AppCompatActivity {
 
     public void openEntryActivity(){
         Intent intent = new Intent(this, EntryActivity.class);
+        startActivity(intent);
+    }
+
+
+    public void openForgotPasswordActivity(){
+        Intent intent = new Intent(this, ForgotPasswordActivity.class);
         startActivity(intent);
     }
 

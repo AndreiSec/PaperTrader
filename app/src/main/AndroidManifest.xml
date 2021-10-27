@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/logo_dark_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.PaperTrader">
-        <activity android:name=".VerificationEmailSentActivity"></activity>
+        <activity android:name=".ui.login.ForgotPasswordActivity"></activity>
+        <activity android:name=".ui.login.VerificationEmailSentActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"

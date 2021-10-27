@@ -6,7 +6,8 @@ dbConnectionString = open("dbConnectionString.txt", "r").read()
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:%Papertrader%123'
+app.config['SQLALCHEMY_DATABASE_URI'] = dbConnectionString
+
 
 db = SQLAlchemy(app)
 

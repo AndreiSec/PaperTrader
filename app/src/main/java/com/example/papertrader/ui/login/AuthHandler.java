@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -17,19 +16,13 @@ import com.example.papertrader.R;
 //import com.example.papertrader.data.LoginDataSource;
 //import com.example.papertrader.data.LoginRepository;
 //import com.example.papertrader.data.Result;
-import com.example.papertrader.VerificationEmailSentActivity;
 import com.example.papertrader.data.model.LoggedInUser;
-import com.example.papertrader.ui.login.EntryActivity;
-import com.example.papertrader.ui.login.LoginActivity;
-import com.example.papertrader.ui.login.RegisterActivity;
-import com.example.papertrader.ui.login.FormResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.text.Normalizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,6 +45,8 @@ public class AuthHandler {
         this.activity = activity;
 
     }
+
+
 
 
     // Username validation check
@@ -118,6 +113,28 @@ public class AuthHandler {
     }
 
 
+    public void sendPasswordResetEmail(String email){
+        mAuth = FirebaseAuth.getInstance();
+
+        mAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(context, context.getString(R.string.forgot_password_reset_sent) + email,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(context,  task.getException().getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
+
+
+    }
+
 
     // Gets the authentication token from shared preferences
     public String getAuthToken(){
@@ -160,6 +177,8 @@ public class AuthHandler {
     // Logs user out of the app
     public void logout() {
 //        dataSource.logout(context);
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.getInstance().signOut();
 
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_auth_key), Context.MODE_PRIVATE);
