@@ -5,15 +5,7 @@ from models import Stock
 import yfinance as yf
 
 
-# Don't store connection string on github as it includes auth details. Read from file
-dbConnectionString = open("dbConnectionString.txt", "r").read()
-
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = dbConnectionString
-
-
-db = SQLAlchemy(app)
+db = globals.db
 
 
 def get_all_stock_tickers():

@@ -1,15 +1,57 @@
+from datetime import datetime
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import server
+import globals
+from sqlalchemy.sql import func
 
-# Don't store connection string on github as it includes auth details. Read from file
-dbConnectionString = open("dbConnectionString.txt", "r").read()
+db = globals.db
+
+INITIAL_BALANCE = 100000
 
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = dbConnectionString
+class PastTransaction(db.Model):
+    __tablename__ = 'past_transactions'
+
+    transaction_id = db.Column(db.Integer, primary_key=True, unique=True)
+    type = db.Column(db.Text, primary_key=False, unique=False)
+    uid = db.Column(db.Text, primary_key=False)
+    ticker = db.Column(db.Text, primary_key=False)
+    stock_amount = db.Column(db.BigInteger, primary_key=False)
+    price_per_stock = db.Column(db.Numeric, primary_key=False)
+    total_cash = db.Column(db.Numeric, primary_key=False)
+
+    def __init__(self, type, uid, ticker, stock_amount, price_per_stock, total_cash):
+        self.type = type
+        self.uid = uid
+        self.ticker = ticker
+        self.stock_amount = stock_amount
+        self.price_per_stock = price_per_stock
+        self.total_cash = total_cash
+
+    def __repr__(self):
+        return '<Transaction %r>' % self.transaction_id
 
 
-db = SQLAlchemy(app)
+class User(db.Model):
+    __tablename__ = 'users'
+
+    uid = db.Column(db.Text, primary_key=True, unique=True)
+    datecreated = db.Column(db.DateTime(timezone=True), server_default=func.now(),
+                            primary_key=False, unique=False)
+    balance = db.Column(db.Numeric, primary_key=False)
+    username = db.Column(db.Text, primary_key=False)
+    email = db.Column(db.Text, primary_key=False)
+
+    def __init__(self,  uid, username, email):
+        self.uid = uid
+        self.datecreated = func.now()
+        self.balance = INITIAL_BALANCE
+        self.username = username
+        self.email = email
+
+    def __repr__(self):
+        return '<User %r>' % self.uid
 
 
 class Stock(db.Model):
@@ -35,3 +77,15 @@ class Stock(db.Model):
 
     def __repr__(self):
         return '<Stock %r>' % self.ticker
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            'ticker': self.ticker,
+            'name': self.name,
+            'exchange': self.exchange,
+            'sector': self.sector,
+            'industry': self.industry,
+            'country': self.country,
+            'currency': self.currency}
