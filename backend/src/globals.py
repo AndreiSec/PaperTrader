@@ -12,5 +12,6 @@ def initialize():
 
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = dbConnectionString
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db = SQLAlchemy(app)
