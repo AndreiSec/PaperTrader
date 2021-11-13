@@ -33,6 +33,27 @@ class PastTransaction(db.Model):
         return '<Transaction %r>' % self.transaction_id
 
 
+class OwnedStock(db.Model):
+    __tablename__ = 'stocks_owned'
+
+    owned_id = db.Column(db.Integer, primary_key=True, unique=True)
+    uid = db.Column(db.Text, primary_key=False)
+    ticker = db.Column(db.Text, primary_key=False)
+    amount_owned = db.Column(db.BigInteger, primary_key=False)
+    price_per_stock = db.Column(db.Numeric, primary_key=False)
+    total_value = db.Column(db.Numeric, primary_key=False)
+
+    def __init__(self, uid, ticker, amount_owned, price_per_stock, total_value):
+        self.uid = uid
+        self.ticker = ticker
+        self.amount_owned = amount_owned
+        self.price_per_stock = price_per_stock
+        self.total_value = total_value
+
+    def __repr__(self):
+        return '<Stocks owned %r>' % self.owned_id
+
+
 class User(db.Model):
     __tablename__ = 'users'
 

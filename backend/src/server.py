@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import yfinance as yf
 from models import *
 import globals
+from decimal import Decimal
 
 # Create database and app sessions in global module
 globals.initialize()
@@ -51,20 +52,21 @@ def stock_info(ticker):
 # Method to let a user purchase a certain amount of stock
 # All the necessary data is contained in the request form as it is a POST
 @app.route('/api/stocks/stocktransaction/buy', methods=['POST'])
-def perform_transaction():
+def perform_transaction_buy():
     try:
         data = request.get_json()
         type = "buy"
         uid = data['uid']
         ticker = data['ticker']
-        stock_amount = data['stock_amount']
-        price_per_stock = data['price_per_stock']
-        total_cash = data['total_cash']
+        stock_amount = int(data['stock_amount'])
+
+        price_per_stock = float(yf.Ticker(ticker).info['currentPrice'])
+        total_cash = stock_amount * price_per_stock
 
         # First, check if user has enough funds to complete this transaction
-        balance = User.query().filter_by(uid=uid).first().balance
+        user = User.query.filter_by(uid=uid).first()
         # In this case, not enough cash to complete transaction
-        if balance < total_cash:
+        if user.balance < total_cash:
             return_message = 'Insufficient funds to complete transaction'
             return {"success": 'false', "message": return_message}
         # In the case that user has enough funds, continue
@@ -75,11 +77,20 @@ def perform_transaction():
 
         db.session.add(past_transaction)
 
+        # Next update users stocks owned
+        new_owned_stock_entry = OwnedStock(
+            uid, ticker, stock_amount, price_per_stock, total_cash)
+        db.session.add(new_owned_stock_entry)
+
+        # Finally update user cash balance
+        user.balance = user.balance - Decimal(total_cash)
+        db.session.merge(user)
+
         # Commit all changes simultaneously
         db.session.commit()
-        return_message = type + " of " + stock_amount + \
-            ' ' + ticker + "at $" + price_per_stock + \
-            " totaling $" + total_cash + " successful "
+        return_message = type + " of " + str(stock_amount) + \
+            ' ' + ticker + "at $" + str(price_per_stock) + \
+            " totaling $" + str(total_cash) + " successful "
         return {"success": 'true', 'message': return_message}
     except Exception as e:
         return {"success": 'false', "message": str(e)}
