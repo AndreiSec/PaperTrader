@@ -19,15 +19,15 @@ class PastTransaction(db.Model):
     ticker = db.Column(db.Text, primary_key=False)
     stock_amount = db.Column(db.BigInteger, primary_key=False)
     price_per_stock = db.Column(db.Numeric, primary_key=False)
-    total_cash = db.Column(db.Numeric, primary_key=False)
+    total_value = db.Column(db.Numeric, primary_key=False)
 
-    def __init__(self, type, uid, ticker, stock_amount, price_per_stock, total_cash):
+    def __init__(self, type, uid, ticker, stock_amount, price_per_stock, total_value):
         self.type = type
         self.uid = uid
         self.ticker = ticker
         self.stock_amount = stock_amount
         self.price_per_stock = price_per_stock
-        self.total_cash = total_cash
+        self.total_value = total_value
 
     def __repr__(self):
         return '<Transaction %r>' % self.transaction_id
@@ -40,18 +40,28 @@ class OwnedStock(db.Model):
     uid = db.Column(db.Text, primary_key=False)
     ticker = db.Column(db.Text, primary_key=False)
     amount_owned = db.Column(db.BigInteger, primary_key=False)
-    price_per_stock = db.Column(db.Numeric, primary_key=False)
+    average_price_per_stock = db.Column(db.Numeric, primary_key=False)
     total_value = db.Column(db.Numeric, primary_key=False)
 
     def __init__(self, uid, ticker, amount_owned, price_per_stock, total_value):
         self.uid = uid
         self.ticker = ticker
         self.amount_owned = amount_owned
-        self.price_per_stock = price_per_stock
+        self.average_price_per_stock = price_per_stock
         self.total_value = total_value
 
     def __repr__(self):
         return '<Stocks owned %r>' % self.owned_id
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            'ticker': self.ticker,
+            'amount_owned': self.amount_owned,
+            'average_price': self.average_price_per_stock,
+            'total_value': self.total_value
+        }
 
 
 class User(db.Model):
