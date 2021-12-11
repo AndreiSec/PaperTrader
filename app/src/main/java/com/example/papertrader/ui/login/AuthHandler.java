@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -16,13 +17,16 @@ import com.example.papertrader.R;
 //import com.example.papertrader.data.LoginDataSource;
 //import com.example.papertrader.data.LoginRepository;
 //import com.example.papertrader.data.Result;
+import com.example.papertrader.api.ApiConnection;
 import com.example.papertrader.data.model.LoggedInUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
+import java.io.Console;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,6 +37,7 @@ import java.util.regex.Pattern;
 public class AuthHandler {
 
     FirebaseAuth mAuth;
+    private ApiConnection apiConnection;
 
     private ProgressBar loadingProgressBar;
     private Context context;
@@ -289,6 +294,28 @@ public class AuthHandler {
 
                     FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
 
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(username)
+                            .build();
+
+                    mUser.updateProfile(profileUpdates)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        String username = mUser.getDisplayName();
+                                        String email = mUser.getEmail();
+                                        String uid = mUser.getUid();
+                                        Log.i("Register info: ", username + " " + email + " " + uid);
+
+                                        apiConnection = new ApiConnection();
+                                        apiConnection.create_user_in_database(uid, username, email);
+                                    }
+                                }
+                            });
+
+
+
                     sendVerificationEmail(mUser);
 
 
@@ -332,7 +359,7 @@ public class AuthHandler {
                             if(mUser.isEmailVerified()){
                                 Toast.makeText(context, "Authentication successful.",
                                         Toast.LENGTH_SHORT).show();
-                                setLoggedInUserInSharedPreferences(new LoggedInUser(mAuth.getCurrentUser().getUid(),"tempUsername"));
+                                setLoggedInUserInSharedPreferences(new LoggedInUser(mUser.getUid(),mUser.getDisplayName()));
                                 openMainActivity();
                             }
                             else{

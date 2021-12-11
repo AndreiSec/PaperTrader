@@ -24,6 +24,11 @@ finnhub_client = globals.finnhub_client
 #
 
 
+def cleanup():
+    db.session.remove()
+    db.engine.dispose()
+
+
 @app.route('/api/account/stocks/get_owned_stocks/<uid>')
 def get_owned_stocks(uid):
     try:
@@ -41,6 +46,8 @@ def get_owned_stocks(uid):
     except Exception as e:
         print(e)
         return {"success": 'false', "message": str(e)}
+    finally:
+        cleanup()
 
 
 @app.route('/api/stocks/stock_info/<ticker>')
@@ -68,10 +75,13 @@ def stock_info(ticker):
 
     except Exception as e:
         return {"success": 'false', "message": str(e)}
-
+    finally:
+        cleanup()
 
 # Method to let a user purchase a certain amount of stock
 # All the necessary data is contained in the request form as it is a POST
+
+
 @app.route('/api/stocks/stocktransaction/buy', methods=['POST'])
 def perform_transaction_buy():
     try:
@@ -133,7 +143,8 @@ def perform_transaction_buy():
     except Exception as e:
         print(e)
         return {"success": 'false', "message": str(e)}
-
+    finally:
+        cleanup()
 # Method to let a user sell a certain amount of stock
 # All the necessary data is contained in the request form as it is a POST
 
@@ -197,6 +208,8 @@ def perform_transaction_sell():
     except Exception as e:
         print(e)
         return {"success": 'false', "message": str(e)}
+    finally:
+        cleanup()
 
 # Method to create a user row in the database
 # All the necessary data is contained in the request form as it is a POST
@@ -206,6 +219,7 @@ def perform_transaction_sell():
 def create_user():
     try:
         data = request.get_json()
+
         uid = data['uid']
         username = data['username']
         email = data['email']
@@ -215,18 +229,26 @@ def create_user():
         db.session.commit()
         return {"success": 'true', "message": 'User ' + uid + ' successfully added'}
     except Exception as e:
+        print("Error " + e)
         return {"success": 'false', "message": str(e)}
-
+    finally:
+        cleanup()
 
 # Returns basic database information of all stocks
+
+
 @app.route('/api/stocks/get_all_stock_info')
 def get_all_stock_info():
     try:
         all_stocks = Stock.query
         output = [i.serialize for i in all_stocks.all()]
+        output = output
+        # print("Success")
         return jsonify({'success': 'true', 'stocks': output})
     except Exception as e:
         return {"success": 'false', "message": str(e)}
+    finally:
+        cleanup()
 
 
 if __name__ == "__main__":

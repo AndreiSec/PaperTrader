@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.papertrader.MainActivity;
+import com.example.papertrader.api.ApiConnection;
 import com.example.papertrader.ui.login.AuthHandler;
 import com.example.papertrader.ui.login.LoginActivity;
 
@@ -38,6 +39,7 @@ import android.widget.Toast;
 
 
 import com.example.papertrader.R;
+import com.google.android.gms.common.api.Api;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -50,6 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
     private ImageView viewPasswordButton;
     private Button already_member;
     private AuthHandler authHandler;
+
 //    private FirebaseAuth mAuth;
     private EditText usernameEditText;
     private EditText emailEditText;
@@ -69,6 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
         final Button registerButton = findViewById(R.id.button_register_register);
 
         authHandler = new AuthHandler(this, this);
+
 
 //        mAuth = FirebaseAuth.getInstance();
 
