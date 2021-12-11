@@ -4,11 +4,13 @@ import yfinance as yf
 from models import *
 import globals
 from decimal import Decimal
+from stock_module import *
 
 # Create database and app sessions in global module
 globals.initialize()
 db = globals.db
 app = globals.app
+finnhub_client = globals.finnhub_client
 
 # Returns JSON of a specific stocks info
 # in the following format:
@@ -47,7 +49,7 @@ def stock_info(ticker):
         stock = Stock.query.filter_by(ticker=ticker)
         output = stock.first().serialize
 
-        info = yf.Ticker(ticker).info
+        info = get_stock_info(ticker)
 
         output['bid'] = info['bid']
         output['ask'] = info['ask']
@@ -79,7 +81,7 @@ def perform_transaction_buy():
         ticker = data['ticker']
         stock_amount = int(data['stock_amount'])
 
-        price_per_stock = float(yf.Ticker(ticker).info['currentPrice'])
+        price_per_stock = get_stock_price(finnhub_client, ticker)
         total_cash = stock_amount * price_per_stock
 
         # First, check if user has enough funds to complete this transaction
@@ -161,7 +163,7 @@ def perform_transaction_sell():
             return {"success": 'false', 'message': return_message}
 
         # Needed to determine which database entry to sell; which price entry
-        stock_price = float(yf.Ticker(ticker).info['currentPrice'])
+        stock_price = get_stock_price(finnhub_client, ticker)
 
         total_cash = stock_amount * stock_price
 

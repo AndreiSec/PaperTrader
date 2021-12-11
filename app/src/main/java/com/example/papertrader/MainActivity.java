@@ -3,6 +3,7 @@ package com.example.papertrader;
 import android.os.Bundle;
 
 import com.example.papertrader.ui.login.AuthHandler;
+import com.example.papertrader.api.ApiConnection;
 //import com.example.papertrader.data.LoginRepository;
 //import com.example.papertrader.ui.login.LoginViewModel;
 //import com.example.papertrader.ui.login.LoginViewModelFactory;
@@ -24,8 +25,10 @@ import com.example.papertrader.ui.main.SectionsPagerAdapter;
 public class MainActivity extends AppCompatActivity {
 
     private Button logout_button;
+    private Button api_test_button;
 //    private LoginViewModel loginViewModel;
     private AuthHandler authHandler;
+    private ApiConnection apiConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +38,23 @@ public class MainActivity extends AppCompatActivity {
 
 
         authHandler = new AuthHandler(this, this);
+        apiConnection = new ApiConnection();
 
 //        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
 //                .get(LoginViewModel.class);
 
+
+
+
+        api_test_button = (Button) findViewById(R.id.button_test_api);
+        api_test_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                apiConnection.get_all_stock_info();
+
+            }
+
+        });
 
 
         logout_button = (Button) findViewById(R.id.button_main_logout);
