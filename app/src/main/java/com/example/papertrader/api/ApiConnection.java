@@ -105,7 +105,7 @@ public class ApiConnection {
 
                     StringBuffer sb = new StringBuffer();
                     int c;
-                    while ((c = responseBody. byteStream().read()) != -1) {
+                    while ((c = responseBody.byteStream().read()) != -1) {
                         sb.append((char) c);
                     }
                     String jsonString = sb.toString();
