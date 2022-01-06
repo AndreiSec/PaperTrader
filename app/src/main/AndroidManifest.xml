@@ -14,7 +14,7 @@
         <activity android:name=".ui.login.ForgotPasswordActivity"></activity>
         <activity android:name=".ui.login.VerificationEmailSentActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.main.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.PaperTrader.NoActionBar" />
         <activity

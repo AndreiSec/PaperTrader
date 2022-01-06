@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -12,7 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.papertrader.MainActivity;
+import com.example.papertrader.ui.main.MainActivity;
 import com.example.papertrader.R;
 //import com.example.papertrader.data.LoginDataSource;
 //import com.example.papertrader.data.LoginRepository;
@@ -26,7 +25,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-import java.io.Console;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

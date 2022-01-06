@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_find_stocks"
+        android:id="@+id/nav_market"
         android:icon="@drawable/icon_search"
         android:title="Market"/>
     <item
-        android:id="@+id/nav_my_stocks"
+        android:id="@+id/nav_holdings"
         android:icon="@drawable/icon_my_stocks"
         android:title="Holdings"/>
     <item
-        android:id="@+id/nav_my_account"
+        android:id="@+id/nav_account"
         android:icon="@drawable/icon_my_account"
         android:title="Account"/>
 

@@ -5,7 +5,7 @@
 //import android.content.SharedPreferences;
 //import android.util.Log;
 //
-//import com.example.papertrader.MainActivity;
+//import com.example.papertrader.ui.main.MainActivity;
 //import com.example.papertrader.R;
 //import com.example.papertrader.data.model.LoggedInUser;
 //import com.example.papertrader.ui.login.EntryActivity;
