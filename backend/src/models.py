@@ -96,8 +96,9 @@ class Stock(db.Model):
     industry = db.Column(db.Text, primary_key=False)
     country = db.Column(db.Text, primary_key=False)
     currency = db.Column(db.Text, primary_key=False)
+    logo_link = db.Column(db.Text, primary_key=False)
 
-    def __init__(self, ticker, name, exchange, sector, industry, country, currency):
+    def __init__(self, ticker, name, exchange, sector, industry, country, currency, logo_link):
         self.ticker = ticker
         self.name = name
         self.exchange = exchange
@@ -105,6 +106,7 @@ class Stock(db.Model):
         self.industry = industry
         self.country = country
         self.currency = currency
+        self.logo_link = logo_link
 
     def __repr__(self):
         return '<Stock %r>' % self.ticker
@@ -119,4 +121,5 @@ class Stock(db.Model):
             'sector': self.sector,
             'industry': self.industry,
             'country': self.country,
-            'currency': self.currency}
+            'currency': self.currency,
+            'logo_link': self.logo_link}

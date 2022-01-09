@@ -3,7 +3,10 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from models import Stock
 import yfinance as yf
+import globals
 
+
+globals.initialize()
 
 db = globals.db
 
@@ -15,9 +18,9 @@ def get_all_stock_tickers():
     return xFile
 
 
-def add_stock_to_stocks_table(ticker, name, exchange, sector, industry, country, currency):
+def add_stock_to_stocks_table(ticker, name, exchange, sector, industry, country, currency, logo_link):
     stock_to_add = Stock(ticker, name, exchange, sector,
-                         industry, country, currency)
+                         industry, country, currency, logo_link)
     db.session.add(stock_to_add)
     return
 
@@ -35,11 +38,12 @@ def add_all_stocks(df):
             currency = info['financialCurrency']
             country = info['country']
             sector = info['sector']
+            logo_link = info['logo_url']
 
             # Add stock to database
             print("Adding stock: " + ticker)
             add_stock_to_stocks_table(
-                ticker, name, exchange, sector, industry, country, currency)
+                ticker, name, exchange, sector, industry, country, currency, logo_link)
             db.session.commit()
         except Exception as e:
             # Ticker not able to be processed by yFinance API

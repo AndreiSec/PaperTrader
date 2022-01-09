@@ -1,13 +1,13 @@
 # import yfinance as yf
 from models import *
 import yfinance as yf
-# msft = yf.Ticker("ADBE")
+msft = yf.Ticker("ADBE")
 
 # # get stock info
-# print(msft.info)
+print(msft.info)
 
-stock_price = float(yf.Ticker('MSFT').info['currentPrice'])
-print(stock_price)
+# stock_price = float(yf.Ticker('MSFT').info['currentPrice'])
+# print(stock_price)
 
 # Create database and app sessions in global module
 # globals.initialize()
