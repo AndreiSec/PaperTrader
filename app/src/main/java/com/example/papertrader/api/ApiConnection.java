@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -19,6 +18,22 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class ApiConnection {
+
+    private static ApiConnection single_instance = null;
+
+    private ApiConnection() {
+
+    }
+
+    public static ApiConnection getInstance()
+    {
+        if (single_instance == null)
+            single_instance = new ApiConnection();
+
+        return single_instance;
+    }
+
+
     final String BASE_API_ADDRESS = "http:10.0.2.2:5000/";
 
 
@@ -86,7 +101,7 @@ public class ApiConnection {
 
     }
 
-    public void get_all_stock_info(){
+    public void get_all_stock_info(ResponseCallBack responseCallBack){
         String url = BASE_API_ADDRESS + "api/stocks/get_all_stock_info";
         Request request = new Request.Builder()
                 .url(url)
@@ -111,19 +126,24 @@ public class ApiConnection {
                     String jsonString = sb.toString();
 
                     JSONObject json = new JSONObject(jsonString);
-                    System.out.println(jsonString);
-                    Headers responseHeaders = response.headers();
+
+                    json.put("Success", "True");
+                    responseCallBack.getJsonResponse(json);
+//                    System.out.println(jsonString);
+//                    Headers responseHeaders = response.headers();
+
 //                    for (int i = 0, size = responseHeaders.size(); i < size; i++) {
 //                        System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
 //                    }
 //                        JSONObject jsonObject = new JSONObject(responseBody.string());
 //                    System.out.println(responseBody.string());
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
-
 
     }
 

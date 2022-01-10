@@ -306,7 +306,7 @@ public class AuthHandler {
                                         String uid = mUser.getUid();
                                         Log.i("Register info: ", username + " " + email + " " + uid);
 
-                                        apiConnection = new ApiConnection();
+                                        apiConnection = ApiConnection.getInstance();
                                         apiConnection.create_user_in_database(uid, username, email);
                                     }
                                 }

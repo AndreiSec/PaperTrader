@@ -27,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private Button api_test_button;
 //    private LoginViewModel loginViewModel;
     private AuthHandler authHandler;
-    private ApiConnection apiConnection;
+    public ApiConnection apiConnection;
+//    private ApiConnection apiConnection;
     private BottomNavigationView bottomNav;
 
     @Override
@@ -37,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         authHandler = new AuthHandler(this, this);
-        apiConnection = new ApiConnection();
 
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(bottomNavMethod);
