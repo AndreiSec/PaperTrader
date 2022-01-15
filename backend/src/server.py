@@ -25,6 +25,7 @@ finnhub_client = globals.finnhub_client
 
 
 def cleanup():
+    print("Cleaning up...")
     db.session.remove()
     db.engine.dispose()
 

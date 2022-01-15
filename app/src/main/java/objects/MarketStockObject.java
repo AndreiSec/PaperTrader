@@ -1,8 +1,11 @@
 package objects;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONObject;
 
-public class MarketStockObject {
+public class MarketStockObject implements Parcelable {
 
 
     private String ticker;
@@ -43,6 +46,29 @@ public class MarketStockObject {
         this.logoUrl = logoUrl;
     }
 
+    protected MarketStockObject(Parcel in) {
+        ticker = in.readString();
+        companyName = in.readString();
+        sector = in.readString();
+        exchange = in.readString();
+        country = in.readString();
+        currency = in.readString();
+        industry = in.readString();
+        logoUrl = in.readString();
+    }
+
+    public static final Creator<MarketStockObject> CREATOR = new Creator<MarketStockObject>() {
+        @Override
+        public MarketStockObject createFromParcel(Parcel in) {
+            return new MarketStockObject(in);
+        }
+
+        @Override
+        public MarketStockObject[] newArray(int size) {
+            return new MarketStockObject[size];
+        }
+    };
+
     public String getTicker() {
         return ticker;
     }
@@ -73,5 +99,22 @@ public class MarketStockObject {
 
     public String getLogoUrl() {
         return logoUrl;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(ticker);
+        dest.writeString(companyName);
+        dest.writeString(sector);
+        dest.writeString(exchange);
+        dest.writeString(country);
+        dest.writeString(currency);
+        dest.writeString(industry);
+        dest.writeString(logoUrl);
     }
 }

@@ -62,16 +62,16 @@
     </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="60dp"
             android:layout_marginVertical="10dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="20dp"
             android:orientation="horizontal"
             android:layout_alignParentRight="true">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
 
                 android:orientation="vertical">
 
@@ -79,6 +79,8 @@
                     android:id="@+id/companyCountry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="11dp"
                     android:text="Loading..."
                     android:textColor="@color/darkBlue"
                     android:textSize="10sp" />
@@ -87,7 +89,10 @@
                     android:id="@+id/companySector"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_below="@+id/companyCountry"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="11dp"
                     android:text="Loading..."
                     android:textColor="@color/darkBlue"
                     android:textSize="10sp" />
@@ -95,14 +100,16 @@
                 <TextView
                     android:id="@+id/companyCurrency"
                     android:layout_width="wrap_content"
-                    android:layout_marginStart="30dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginBottom="6dp"
                     android:text="Loading..."
                     android:textColor="@color/lightBlue"
                     android:textSize="14sp" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
 
         </LinearLayout>

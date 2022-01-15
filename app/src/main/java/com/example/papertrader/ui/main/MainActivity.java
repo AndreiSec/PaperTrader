@@ -1,5 +1,6 @@
 package com.example.papertrader.ui.main;
 
+import android.content.ContentValues;
 import android.os.Bundle;
 
 import com.example.papertrader.R;
@@ -17,6 +18,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.MenuItem;
 import android.widget.Button;
@@ -26,79 +28,113 @@ public class MainActivity extends AppCompatActivity {
     private Button logout_button;
     private Button api_test_button;
 //    private LoginViewModel loginViewModel;
-    private AuthHandler authHandler;
     public ApiConnection apiConnection;
 //    private ApiConnection apiConnection;
     private BottomNavigationView bottomNav;
+
+    private static final String TAG_FRAGMENT_MARKET = "fragment_market";
+    private static final String TAG_FRAGMENT_HOLDINGS = "fragment_holdings";
+    private static final String TAG_FRAGMENT_ACCOUNT = "fragment_account";
+
+    private MarketFragment marketFragment = MarketFragment.getInstance();
+    private HoldingsFragment holdingsFragment = HoldingsFragment.getInstance();
+    private AccountFragment accountFragment = AccountFragment.getInstance();
+
+    private FragmentManager fragmentManager;
+    private Fragment currentFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        fragmentManager = getSupportFragmentManager();
 
-
-        authHandler = new AuthHandler(this, this);
 
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(bottomNavMethod);
         bottomNav.setSelectedItemId(R.id.nav_market);
 
+
+
+
+
+//        System.out.println("Market fragment set...");
+//        System.out.println(marketFragment.toString());
 //        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
 //                .get(LoginViewModel.class);
 
 
 
+    }
 
-//        api_test_button = (Button) findViewById(R.id.button_test_api);
-//        api_test_button.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v){
-//                apiConnection.get_all_stock_info();
-//
-//            }
-//
-//        });
+    protected void onStop() {
+        // call the superclass method first
+        super.onStop();
+        System.out.println("Main Activity Stopping..");
+        marketFragment.deleteInstance();
+        holdingsFragment.deleteInstance();
+        accountFragment.deleteInstance();
 
-
-//        logout_button = (Button) findViewById(R.id.button_main_logout);
-//        logout_button.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v){
-//                authHandler.logout();
-//
-//            }
-//
-//        });
 
     }
+
+
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//
+//        //Save the fragment's instance
+//        getSupportFragmentManager().putFragment(outState, TAG_FRAGMENT_MARKET, mMyFragment);
+//    }
 
     // Method to switch fragments on the bottom nav bar
     private NavigationBarView.OnItemSelectedListener bottomNavMethod=new NavigationBarView.OnItemSelectedListener(){
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem){
-
             Fragment fragment = null;
-//            System.out.println(menuItem.getItemId());
+
             switch(menuItem.getItemId()){
 
+
                 case R.id.nav_market:
-                    fragment = new MarketFragment();
+                    fragment = fragmentManager.findFragmentByTag(TAG_FRAGMENT_MARKET);
+                    if (fragment == null) {
+                        fragment = marketFragment.getInstance();
+                    }
+                    replaceFragment(fragment, TAG_FRAGMENT_MARKET);
                     break;
 
                 case R.id.nav_holdings:
-                    fragment = new HoldingsFragment();
+                    fragment = fragmentManager.findFragmentByTag(TAG_FRAGMENT_HOLDINGS);
+                    if (fragment == null) {
+                        fragment = holdingsFragment.getInstance();
+                    }
+                    replaceFragment(fragment, TAG_FRAGMENT_HOLDINGS);
                     break;
 
                 case R.id.nav_account:
-                    fragment = new AccountFragment();
+                    fragment = fragmentManager.findFragmentByTag(TAG_FRAGMENT_ACCOUNT);
+                    if (fragment == null) {
+                        fragment = accountFragment.getInstance();
+                    }
+                    replaceFragment(fragment, TAG_FRAGMENT_ACCOUNT);
                     break;
             }
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
             return true;
         }
     };
 
-
+    private void replaceFragment(@NonNull Fragment fragment, @NonNull String tag) {
+        if (!fragment.equals(currentFragment)) {
+            fragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment, tag)
+                    .commit();
+            currentFragment = fragment;
+        }
+    }
 
 }

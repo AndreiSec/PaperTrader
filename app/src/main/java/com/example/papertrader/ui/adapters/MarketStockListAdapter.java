@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.papertrader.R;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -67,8 +68,9 @@ public class MarketStockListAdapter extends ArrayAdapter<MarketStockObject> {
         exchangeTextView.setText(exchange);
         countryTextView.setText(country);
         currencyTextView.setText(currency);
-        logoUrlImageView.setImageURI(); // NEED TO SET IMAGE URL !!
+        Picasso.get().load(logoUrl).into(logoUrlImageView);
 
+        return convertView;
 
     }
 }

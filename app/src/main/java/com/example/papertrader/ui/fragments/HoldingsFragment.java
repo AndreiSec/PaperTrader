@@ -13,8 +13,22 @@ import com.example.papertrader.R;
 
 public class HoldingsFragment extends Fragment {
 
-    public HoldingsFragment(){
 
+    private HoldingsFragment(){
+
+    }
+
+    private static HoldingsFragment instance;
+
+    public static HoldingsFragment getInstance(){
+        if(instance == null)
+            instance = new HoldingsFragment();
+
+        return instance;
+    }
+
+    public void deleteInstance(){
+        instance = null;
     }
 
     @Nullable

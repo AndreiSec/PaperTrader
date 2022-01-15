@@ -20,7 +20,7 @@ import java.util.List;
 
 public class SharedViewModel extends ViewModel {
 
-    private MutableLiveData<List<JSONObject>> market_stocks;
+    private MutableLiveData<List<JSONObject>> market_stocks = null;
     private ApiConnection apiConnection = ApiConnection.getInstance();
 
     public LiveData<List<JSONObject>> getMarketStocks() {
