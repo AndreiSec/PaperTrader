@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
-    tools:context=".ui.main.MainActivity">
+    tools:context=".ui.main.MainActivity"
+    android:orientation="vertical">
+
+
+
+
+    <include layout="@layout/market_filter_bar"/>
+
+    <ListView
+        android:id="@+id/marketListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true">
+
+    </ListView>
 
     <RelativeLayout
         android:id="@+id/loadingPanel"
@@ -19,14 +32,5 @@
             android:indeterminate="true" />
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/marketListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
 
-    </ListView>
-
-
-</RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:id="@+id/MarketFilterBar"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        tools:showIn="@layout/fragment_market"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+
+            app:srcCompat="@drawable/ic_baseline_search_24">
+
+        </ImageView>
+
+
+
+
+
+        <EditText
+            android:id="@+id/searchMarketStocks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Search..."
+            />
+
+        <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:src="@drawable/ic_baseline_filter_list_24"
+            tools:src="@drawable/ic_baseline_filter_list_24" />
+
+
+
+
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

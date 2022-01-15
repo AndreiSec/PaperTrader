@@ -3,10 +3,13 @@ package com.example.papertrader.ui.fragments;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -34,6 +37,9 @@ import objects.MarketStockObject;
 public class MarketFragment extends Fragment {
 
     private ArrayList<MarketStockObject> marketStockObjects;
+
+    public ListView marketStocksListView;
+
 
     private MarketFragment(){
 
@@ -71,6 +77,46 @@ public class MarketFragment extends Fragment {
 
     }
 
+
+    private void initSearchWidgets(){
+        TextView searchText = (TextView) getView().findViewById(R.id.searchMarketStocks);
+
+        searchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ArrayList<MarketStockObject> filteredStocks = new ArrayList<MarketStockObject>();
+
+                for(MarketStockObject stock:marketStockObjects){
+                    // A string to perform searching on so all the stock fields are scanned
+                    String searchString = stock.getCompanyName() + " " + stock.getCountry() + " " + stock.getCurrency() + " " + stock.getExchange() + " " + stock.getIndustry() + " " + stock.getSector() + " " + stock.getTicker();
+                    searchString = searchString.toLowerCase();
+                    if(searchString.contains(s)){
+                        filteredStocks.add(stock);
+                    }
+
+                }
+
+                MarketStockListAdapter adapter = new MarketStockListAdapter(getContext(), R.layout.market_list_item, filteredStocks);
+                marketStocksListView.setAdapter(adapter);
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+    }
+
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
 
@@ -85,7 +131,7 @@ public class MarketFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         view.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
-        ListView marketStocksListView = (ListView) view.findViewById(R.id.marketListView);
+        marketStocksListView = (ListView) view.findViewById(R.id.marketListView);
 
         if(marketStockObjects == null){
             SharedViewModel model = new ViewModelProvider(this).get(SharedViewModel.class);
@@ -117,7 +163,7 @@ public class MarketFragment extends Fragment {
 
 
 
-
+        initSearchWidgets();
 
         view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
