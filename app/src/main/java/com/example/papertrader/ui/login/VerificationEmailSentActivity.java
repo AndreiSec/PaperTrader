@@ -22,7 +22,7 @@ public class VerificationEmailSentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification_email_sent);
 
-        button_back = (FloatingActionButton) findViewById(R.id.button_verificationscreen_back);
+        button_back = findViewById(R.id.button_verificationscreen_back);
         button_back.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

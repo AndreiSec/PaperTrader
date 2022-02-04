@@ -21,7 +21,53 @@ import java.util.List;
 public class SharedViewModel extends ViewModel {
 
     private MutableLiveData<List<JSONObject>> market_stocks = null;
-    private ApiConnection apiConnection = ApiConnection.getInstance();
+    private MutableLiveData<List<JSONObject>> holdings_stocks = null;
+    private final ApiConnection apiConnection = ApiConnection.getInstance();
+
+    public LiveData<List<JSONObject>> getHoldingsStocks(String authToken) {
+        if (holdings_stocks == null) {
+            holdings_stocks = new MutableLiveData<List<JSONObject>>();
+            loadHoldingStocks(authToken);
+        }
+        return holdings_stocks;
+    }
+
+    private void loadHoldingStocks(String authToken) {
+        // Get all held user stocks from backend
+
+        apiConnection.get_owned_stocks(new ResponseCallBack() {
+
+            @Override
+            public void getJsonResponse(JSONObject json) {
+                String jsonString = json.toString();
+                System.out.println("RESPONSE:");
+                System.out.println(jsonString);
+
+                List<JSONObject> temp_stock_list = new ArrayList<JSONObject>();
+
+                JSONArray jArray = null;
+                try {
+                    jArray = (JSONArray)json.get("stocks");
+
+                    if (jArray != null) {
+                        for (int i=0;i<jArray.length();i++){
+                            temp_stock_list.add((JSONObject) jArray.get(i));
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
+                holdings_stocks.postValue(temp_stock_list);
+
+            }
+        }, authToken);
+    }
+
+
 
     public LiveData<List<JSONObject>> getMarketStocks() {
         if (market_stocks == null) {

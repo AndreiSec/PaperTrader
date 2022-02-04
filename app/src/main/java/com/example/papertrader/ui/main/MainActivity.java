@@ -36,9 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_FRAGMENT_HOLDINGS = "fragment_holdings";
     private static final String TAG_FRAGMENT_ACCOUNT = "fragment_account";
 
-    private MarketFragment marketFragment = MarketFragment.getInstance();
-    private HoldingsFragment holdingsFragment = HoldingsFragment.getInstance();
-    private AccountFragment accountFragment = AccountFragment.getInstance();
+    private final MarketFragment marketFragment = MarketFragment.getInstance();
 
     private FragmentManager fragmentManager;
     private Fragment currentFragment;
@@ -73,9 +71,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         System.out.println("Main Activity Stopping..");
         marketFragment.deleteInstance();
-        holdingsFragment.deleteInstance();
-        accountFragment.deleteInstance();
-
 
     }
 
@@ -89,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     // Method to switch fragments on the bottom nav bar
-    private NavigationBarView.OnItemSelectedListener bottomNavMethod=new NavigationBarView.OnItemSelectedListener(){
+    private final NavigationBarView.OnItemSelectedListener bottomNavMethod=new NavigationBarView.OnItemSelectedListener(){
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem){
             Fragment fragment = null;
@@ -100,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_market:
                     fragment = fragmentManager.findFragmentByTag(TAG_FRAGMENT_MARKET);
                     if (fragment == null) {
-                        fragment = marketFragment.getInstance();
+                        fragment = MarketFragment.getInstance();
                     }
                     replaceFragment(fragment, TAG_FRAGMENT_MARKET);
                     break;
@@ -108,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_holdings:
                     fragment = fragmentManager.findFragmentByTag(TAG_FRAGMENT_HOLDINGS);
                     if (fragment == null) {
-                        fragment = holdingsFragment.getInstance();
+                        fragment = new HoldingsFragment();
                     }
                     replaceFragment(fragment, TAG_FRAGMENT_HOLDINGS);
                     break;
@@ -116,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_account:
                     fragment = fragmentManager.findFragmentByTag(TAG_FRAGMENT_ACCOUNT);
                     if (fragment == null) {
-                        fragment = accountFragment.getInstance();
+                        fragment = new AccountFragment();
                     }
                     replaceFragment(fragment, TAG_FRAGMENT_ACCOUNT);
                     break;

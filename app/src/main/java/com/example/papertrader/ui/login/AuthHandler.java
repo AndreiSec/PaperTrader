@@ -38,8 +38,8 @@ public class AuthHandler {
     private ApiConnection apiConnection;
 
     private ProgressBar loadingProgressBar;
-    private Context context;
-    private Activity activity;
+    private final Context context;
+    private final Activity activity;
 
 //    public Context context;
 
@@ -168,11 +168,7 @@ public class AuthHandler {
 
         String authKey = getAuthToken();
 
-        if(authKey == null){
-            return false;
-        }
-
-        return true;
+        return authKey != null;
 
 
     }
@@ -181,7 +177,7 @@ public class AuthHandler {
     public void logout() {
 //        dataSource.logout(context);
         mAuth = FirebaseAuth.getInstance();
-        mAuth.getInstance().signOut();
+        FirebaseAuth.getInstance().signOut();
 
         SharedPreferences sharedPref = context.getSharedPreferences(
                 context.getString(R.string.preference_auth_key), Context.MODE_PRIVATE);

@@ -21,21 +21,8 @@ public class AccountFragment extends Fragment {
     private AuthHandler authHandler;
 
 
-    private AccountFragment(){
+    public AccountFragment(){
 
-    }
-
-    private static AccountFragment instance;
-
-    public static AccountFragment getInstance(){
-        if(instance == null)
-            instance = new AccountFragment();
-
-        return instance;
-    }
-
-    public void deleteInstance(){
-        instance = null;
     }
 
     @Nullable
@@ -54,7 +41,7 @@ public class AccountFragment extends Fragment {
 
         authHandler = new AuthHandler(this.getContext(), this.getActivity());
 
-        logout_button = (Button) view.findViewById(R.id.button_main_logout);
+        logout_button = view.findViewById(R.id.button_main_logout);
         logout_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

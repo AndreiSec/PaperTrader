@@ -40,7 +40,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
 
 
-        button_back = (FloatingActionButton) findViewById(R.id.button_forgotpassword_back);
+        button_back = findViewById(R.id.button_forgotpassword_back);
         button_back.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

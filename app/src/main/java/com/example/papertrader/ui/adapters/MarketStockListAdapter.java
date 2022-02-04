@@ -24,7 +24,7 @@ public class MarketStockListAdapter extends ArrayAdapter<MarketStockObject> {
 
     private static final String TAG = "MarketStockListAdapter";
 
-    private Context mContext;
+    private final Context mContext;
     int mResource;
 
     public MarketStockListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<MarketStockObject> marketStockObjects) {
@@ -52,14 +52,14 @@ public class MarketStockListAdapter extends ArrayAdapter<MarketStockObject> {
         convertView = inflater.inflate(mResource, parent, false);
 
         // Set text and image views to correct information
-        TextView tickerTextView = (TextView) convertView.findViewById(R.id.companyTicker);
-        TextView companyNameTextView = (TextView) convertView.findViewById(R.id.companyName);
-        TextView sectorTextView = (TextView) convertView.findViewById(R.id.companySector);
-        TextView exchangeTextView = (TextView) convertView.findViewById(R.id.exchange);
-        TextView countryTextView = (TextView) convertView.findViewById(R.id.companyCountry);
-        TextView currencyTextView = (TextView) convertView.findViewById(R.id.companyCurrency);
+        TextView tickerTextView = convertView.findViewById(R.id.companyTicker);
+        TextView companyNameTextView = convertView.findViewById(R.id.companyName);
+        TextView sectorTextView = convertView.findViewById(R.id.companySector);
+        TextView exchangeTextView = convertView.findViewById(R.id.exchange);
+        TextView countryTextView = convertView.findViewById(R.id.companyCountry);
+        TextView currencyTextView = convertView.findViewById(R.id.companyCurrency);
 //        TextView industryTextView = (TextView) convertView.findViewById(R.id.);
-        ImageView logoUrlImageView = (ImageView) convertView.findViewById(R.id.companyLogo);
+        ImageView logoUrlImageView = convertView.findViewById(R.id.companyLogo);
 
 
         tickerTextView.setText(ticker);

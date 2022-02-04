@@ -33,7 +33,7 @@ public class EntryActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_entry);
 
-        register_button = (Button) findViewById(R.id.button_entry_register);
+        register_button = findViewById(R.id.button_entry_register);
         register_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -44,7 +44,7 @@ public class EntryActivity extends AppCompatActivity {
 
 
 
-        signin_button = (Button) findViewById(R.id.button_entry_signin);
+        signin_button = findViewById(R.id.button_entry_signin);
         signin_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

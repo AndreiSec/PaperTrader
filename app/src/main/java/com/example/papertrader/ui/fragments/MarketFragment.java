@@ -66,7 +66,7 @@ public class MarketFragment extends Fragment {
 
         if (savedInstanceState != null) {
             System.out.println("SAVED INSTANCE STATE ISN'T NULL");
-            marketStockObjects = (ArrayList<MarketStockObject>) savedInstanceState.get("Stock Objects");
+            marketStockObjects = (ArrayList<MarketStockObject>) savedInstanceState.get("Stock  Objects");
         }
         else{
             System.out.println("SAVED INSTANCE STATE IS NULL");
@@ -79,7 +79,7 @@ public class MarketFragment extends Fragment {
 
 
     private void initSearchWidgets(){
-        TextView searchText = (TextView) getView().findViewById(R.id.searchMarketStocks);
+        TextView searchText = getView().findViewById(R.id.searchMarketStocks);
 
         searchText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -90,7 +90,7 @@ public class MarketFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 ArrayList<MarketStockObject> filteredStocks = new ArrayList<MarketStockObject>();
-
+                s = s.toString().toLowerCase();
                 for(MarketStockObject stock:marketStockObjects){
                     // A string to perform searching on so all the stock fields are scanned
                     String searchString = stock.getCompanyName() + " " + stock.getCountry() + " " + stock.getCurrency() + " " + stock.getExchange() + " " + stock.getIndustry() + " " + stock.getSector() + " " + stock.getTicker();
@@ -129,9 +129,9 @@ public class MarketFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        view.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+        getActivity().findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
-        marketStocksListView = (ListView) view.findViewById(R.id.marketListView);
+        marketStocksListView = view.findViewById(R.id.marketListView);
 
         if(marketStockObjects == null){
             SharedViewModel model = new ViewModelProvider(this).get(SharedViewModel.class);
@@ -140,32 +140,24 @@ public class MarketFragment extends Fragment {
                 System.out.println(jsonString);
 
 
-                view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
                 marketStockObjects = new ArrayList<MarketStockObject>();
 
-                for(JSONObject stockJson: marketStocks){
+                for(JSONObject stockJson: marketStocks)
                     marketStockObjects.add(new MarketStockObject(stockJson));
-
-                }
 
                 MarketStockListAdapter adapter = new MarketStockListAdapter(this.getContext(), R.layout.market_list_item, marketStockObjects);
                 marketStocksListView.setAdapter(adapter);
             });
         }
-        else{
+        else {
             MarketStockListAdapter adapter = new MarketStockListAdapter(this.getContext(), R.layout.market_list_item, marketStockObjects);
             marketStocksListView.setAdapter(adapter);
         }
 
-
-
-
-
-
         initSearchWidgets();
 
-        view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
 
     }

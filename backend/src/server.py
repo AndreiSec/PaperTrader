@@ -30,7 +30,7 @@ def cleanup():
     db.engine.dispose()
 
 
-@app.route('/api/account/stocks/get_owned_stocks/<uid>')
+@app.route('/api/account/stocks/get_owned_stocks/<uid>', methods=['GET'])
 def get_owned_stocks(uid):
     try:
         user = User.query.filter_by(uid=uid).first()
@@ -42,6 +42,21 @@ def get_owned_stocks(uid):
             uid=uid)
 
         output = [i.serialize for i in user_owned_stocks.all()]
+
+        # Add stock prices to output
+        for index, stock in enumerate(output):
+            name = Stock.query.filter_by(
+                ticker=stock['ticker']).first().serialize['name']
+            price = get_stock_price(finnhub_client, stock['ticker'])
+            output[index]['average_price'] = round(
+                float(output[index]['average_price']), 2)
+            output[index]['total_value'] = round(
+                float(output[index]['total_value']), 2)
+            output[index]['name'] = name
+            output[index]['price'] = float(price)
+            output[index]['current_value'] = float(price *
+                                                   output[index]['amount_owned'])
+
         return jsonify({'success': 'true', 'stocks': output})
 
     except Exception as e:
@@ -51,7 +66,7 @@ def get_owned_stocks(uid):
         cleanup()
 
 
-@app.route('/api/stocks/stock_info/<ticker>')
+@app.route('/api/stocks/stock_info/<ticker>', methods=['GET'])
 def stock_info(ticker):
     try:
         stock = Stock.query.filter_by(ticker=ticker)
@@ -238,7 +253,7 @@ def create_user():
 # Returns basic database information of all stocks
 
 
-@app.route('/api/stocks/get_all_stock_info')
+@app.route('/api/stocks/get_all_stock_info', methods=['GET'])
 def get_all_stock_info():
     try:
         all_stocks = Stock.query

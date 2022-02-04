@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        button_back = (FloatingActionButton) findViewById(R.id.button_signin_back);
+        button_back = findViewById(R.id.button_signin_back);
         button_back.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
