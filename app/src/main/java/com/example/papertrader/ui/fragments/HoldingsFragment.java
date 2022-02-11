@@ -40,7 +40,7 @@ public class HoldingsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        getActivity().findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
         authHandler = new AuthHandler(this.getContext(), this.getActivity());
 
         holdingsStocksListView = view.findViewById(R.id.holdingsListView);
@@ -58,10 +58,11 @@ public class HoldingsFragment extends Fragment {
 
                 HoldingsStockListAdapter adapter = new HoldingsStockListAdapter(this.getContext(), R.layout.holdings_list_item, holdingStockObjects);
                 holdingsStocksListView.setAdapter(adapter);
+                view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
             });
 
 
-        getActivity().findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+
 
 
     }
@@ -69,6 +70,7 @@ public class HoldingsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
+
         return inflater.inflate(R.layout.fragment_holdings, container, false);
     }
 

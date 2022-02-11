@@ -7,7 +7,19 @@
     tools:context=".ui.main.MainActivity"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" >
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="24dp"
+            android:visibility="visible" />
 
+    </LinearLayout>
 
 
     <include layout="@layout/market_filter_bar"/>

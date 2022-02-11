@@ -52,6 +52,11 @@
 
     <string name="preference_auth_key">authKey</string>
     <string name="preference_user_name">userName</string>
+    <string name="current_holdings">Current Stocks Owned:</string>
+    <string name="no_stocks_owned">You currently have no holdings.</string>
+    <string name="buy_some_stocks">Try buying some at in the market tab</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

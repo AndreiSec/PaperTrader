@@ -129,7 +129,7 @@ public class MarketFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        getActivity().findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
         marketStocksListView = view.findViewById(R.id.marketListView);
 
@@ -157,7 +157,7 @@ public class MarketFragment extends Fragment {
 
         initSearchWidgets();
 
-        getActivity().findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+        view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
 
     }
