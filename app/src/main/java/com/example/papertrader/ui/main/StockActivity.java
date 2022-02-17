@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ import com.example.papertrader.R;
 import com.example.papertrader.api.ApiConnection;
 import com.example.papertrader.data.SharedViewModel;
 import com.example.papertrader.ui.adapters.HoldingsStockListAdapter;
+import com.example.papertrader.ui.adapters.StockGridAdapter;
 import com.example.papertrader.ui.login.AuthHandler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
@@ -20,6 +22,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 
 import objects.HoldingsStockObject;
 
@@ -58,6 +62,42 @@ public class StockActivity extends AppCompatActivity {
 
                 ImageView imageview_logo = (ImageView) findViewById(R.id.stockStatLogo);
                 Picasso.get().load(logo_url).into(imageview_logo);
+
+                String stockInfoString = stock_stats.toString();
+                System.out.println("JSON IN STOCK ACTIVITY: " + stockInfoString);
+
+                Iterator<String> keys = stock_info.keys();
+
+                ArrayList<String> stock_info_keys = new ArrayList<String>();
+                ArrayList<String> stock_info_values = new ArrayList<String>();
+
+                while(keys.hasNext()) {
+                    String key = keys.next();
+
+                    String[] black_listed_keys = {"name", "ticker", "logo_link"};
+
+                    if(Arrays.asList(black_listed_keys).contains(key)){
+                        // Iterate over black listed keys
+                        continue;
+                    }
+                    stock_info_keys.add(key);
+
+                    try {
+                        stock_info_values.add(stock_info.getString(key));
+                    } catch (JSONException e) {
+                        stock_info_values.add("");
+                    }
+
+                }
+
+                    System.out.println("stock_info_keys:");
+                System.out.println(stock_info_keys);
+
+                StockGridAdapter gridAdapter = new StockGridAdapter(this, stock_info_keys, stock_info_values);
+                GridView stats_grid_view = (GridView) findViewById(R.id.stockStatsGridView);
+                System.out.println("GRID VIEW:");
+                System.out.println(stats_grid_view);
+                stats_grid_view.setAdapter(gridAdapter);
 
 
             } catch (JSONException e) {

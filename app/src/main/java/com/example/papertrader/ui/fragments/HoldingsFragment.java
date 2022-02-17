@@ -65,6 +65,7 @@ public class HoldingsFragment extends Fragment {
                 view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
             });
 
+
         holdingsStocksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

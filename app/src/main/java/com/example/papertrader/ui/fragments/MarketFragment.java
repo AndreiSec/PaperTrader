@@ -108,19 +108,7 @@ public class MarketFragment extends Fragment {
                 marketStocksListView.setAdapter(adapter);
 
 
-                marketStocksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        System.out.println("CLICKED!!!");
-                        String ticker_selected = marketStockObjects.get(position).getTicker();
 
-                        Intent stock_activity = new Intent(getActivity(), StockActivity.class);
-                        Bundle b = new Bundle();
-                        b.putString("Ticker", ticker_selected);
-                        stock_activity.putExtras(b);
-                        startActivity(stock_activity);
-                    }
-                });
             }
 
             @Override
@@ -172,6 +160,21 @@ public class MarketFragment extends Fragment {
         }
 
         initSearchWidgets();
+
+
+        marketStocksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("CLICKED!!!");
+                String ticker_selected = marketStockObjects.get(position).getTicker();
+
+                Intent stock_activity = new Intent(getActivity(), StockActivity.class);
+                Bundle b = new Bundle();
+                b.putString("Ticker", ticker_selected);
+                stock_activity.putExtras(b);
+                startActivity(stock_activity);
+            }
+        });
 
         view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
