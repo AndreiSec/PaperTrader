@@ -43,13 +43,14 @@
 
 
         <ImageView
-            android:id="@+id/stockLogo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:id="@+id/stockStatLogo"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
             android:src="@drawable/icon_my_stocks" />
 
         <TextView
-            android:id="@+id/stockTicker"
+            android:id="@+id/stockStatTicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TIKR"
@@ -61,7 +62,7 @@
 
 
     <TextView
-        android:id="@+id/stockName"
+        android:id="@+id/stockStatName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -72,6 +73,57 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <GridView
+        android:id="@+id/simpleGridView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numColumns="3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stockStatName"
+        android:layout_marginTop="16dp"
+        />
+
+    <Button
+        android:id="@+id/button_stock_buy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#FFFFFF"
+        android:elevation="10dp"
+        android:fontFamily="@font/gotham_rounded_bold"
+        android:text="@string/stock_buy"
+        android:textColor="@color/lightBlue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.215"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/lightBlue"
+        app:strokeWidth="1dp" />
+
+    <Button
+        android:id="@+id/button_stock_sell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#FFFFFF"
+        android:elevation="10dp"
+        android:fontFamily="@font/gotham_rounded_bold"
+        android:text="@string/stock_sell"
+        android:textColor="@color/lightBlue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.784"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/lightBlue"
+        app:strokeWidth="1dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

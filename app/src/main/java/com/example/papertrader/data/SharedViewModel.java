@@ -22,7 +22,38 @@ public class SharedViewModel extends ViewModel {
 
     private MutableLiveData<List<JSONObject>> market_stocks = null;
     private MutableLiveData<List<JSONObject>> holdings_stocks = null;
+    private MutableLiveData<JSONObject> stock_info = null;
     private final ApiConnection apiConnection = ApiConnection.getInstance();
+
+    public MutableLiveData<JSONObject> getStockInfo(String authToken, String ticker) {
+
+        if (stock_info == null) {
+            stock_info = new MutableLiveData<JSONObject>();
+            loadStockInfo(authToken, ticker);
+        }
+
+        return stock_info;
+    }
+
+    private void loadStockInfo(String authToken, String ticker) {
+        // Get stock info and the owned stocks (if any) of the ticker and authToken
+        System.out.println("AUTH TOKEN: " + authToken);
+        System.out.println("TICKER: " + ticker);
+        apiConnection.get_stock_stats(new ResponseCallBack() {
+
+            @Override
+            public void getJsonResponse(JSONObject json) {
+                String jsonString = json.toString();
+                System.out.println("RESPONSE:");
+                System.out.println(jsonString);
+
+
+                stock_info.postValue(json);
+
+            }
+        }, authToken, ticker);
+    }
+
 
     public LiveData<List<JSONObject>> getHoldingsStocks(String authToken) {
         if (holdings_stocks == null) {
@@ -47,7 +78,7 @@ public class SharedViewModel extends ViewModel {
 
                 JSONArray jArray = null;
                 try {
-                    jArray = (JSONArray)json.get("stocks");
+                    jArray = (JSONArray)json.get("stocks_owned");
 
                     if (jArray != null) {
                         for (int i=0;i<jArray.length();i++){

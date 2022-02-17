@@ -5,9 +5,9 @@ from models import *
 import globals
 from decimal import Decimal
 from stock_module import *
+import asyncio
 
 # Create database and app sessions in global module
-globals.initialize()
 db = globals.db
 app = globals.app
 finnhub_client = globals.finnhub_client
@@ -33,61 +33,19 @@ def cleanup():
 @app.route('/api/account/stocks/get_owned_stocks/<uid>', methods=['GET'])
 def get_owned_stocks(uid):
     try:
-        user = User.query.filter_by(uid=uid).first()
-        if user is None:
-            return_message = 'User does not exist'
-            return {"success": 'false', "message": return_message}
-
-        user_owned_stocks = OwnedStock.query.filter_by(
-            uid=uid)
-
-        output = [i.serialize for i in user_owned_stocks.all()]
-
-        # Add stock prices to output
-        for index, stock in enumerate(output):
-            name = Stock.query.filter_by(
-                ticker=stock['ticker']).first().serialize['name']
-            price = get_stock_price(finnhub_client, stock['ticker'])
-            output[index]['average_price'] = round(
-                float(output[index]['average_price']), 2)
-            output[index]['total_value'] = round(
-                float(output[index]['total_value']), 2)
-            output[index]['name'] = name
-            output[index]['price'] = float(price)
-            output[index]['current_value'] = float(price *
-                                                   output[index]['amount_owned'])
-
-        return jsonify({'success': 'true', 'stocks': output})
-
+        return jsonify({"stocks_owned": get_owned_stocks_by_uid(finnhub_client, uid)})
     except Exception as e:
-        print(e)
         return {"success": 'false', "message": str(e)}
     finally:
         cleanup()
 
 
-@app.route('/api/stocks/stock_info/<ticker>', methods=['GET'])
-def stock_info(ticker):
+@app.route('/api/stocks/stock_info/<ticker>/<uid>', methods=['GET'])
+def stock_info(ticker, uid):
     try:
-        stock = Stock.query.filter_by(ticker=ticker)
-        output = stock.first().serialize
-
-        info = get_stock_info(ticker)
-
-        output['bid'] = info['bid']
-        output['ask'] = info['ask']
-        output['recommendationKey'] = info['recommendationKey']
-        output['open'] = info['open']
-        output['high'] = info['dayHigh']
-        output['low'] = info['dayLow']
-        output['mkt_cap'] = info['marketCap']
-        output['price_earnings'] = info['bid']
-        output['52w_high'] = info['fiftyTwoWeekHigh']
-        output['52w_low'] = info['fiftyTwoWeekLow']
-        output['volume'] = info['volume']
-        output['avg_volume'] = info['averageVolume']
-        output['div_yield'] = info['dividendYield']
-        return jsonify({'success': 'true', 'stocks': output})
+        return jsonify({'stock_info': get_stock_info_by_ticker(ticker),
+                        "owned_stock_info": get_owned_stock_by_uid_ticker(
+            finnhub_client, uid, ticker)})
 
     except Exception as e:
         return {"success": 'false', "message": str(e)}

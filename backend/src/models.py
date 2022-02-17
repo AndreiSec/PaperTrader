@@ -1,9 +1,10 @@
 from datetime import datetime
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-import server
 import globals
 from sqlalchemy.sql import func
+
+globals.initialize()
 
 db = globals.db
 

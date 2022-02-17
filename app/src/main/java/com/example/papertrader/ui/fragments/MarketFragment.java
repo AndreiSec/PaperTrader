@@ -1,6 +1,7 @@
 package com.example.papertrader.ui.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
@@ -8,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +23,7 @@ import com.example.papertrader.api.ApiConnection;
 import com.example.papertrader.api.ResponseCallBack;
 import com.example.papertrader.data.SharedViewModel;
 import com.example.papertrader.ui.adapters.MarketStockListAdapter;
+import com.example.papertrader.ui.main.StockActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -105,6 +108,19 @@ public class MarketFragment extends Fragment {
                 marketStocksListView.setAdapter(adapter);
 
 
+                marketStocksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        System.out.println("CLICKED!!!");
+                        String ticker_selected = marketStockObjects.get(position).getTicker();
+
+                        Intent stock_activity = new Intent(getActivity(), StockActivity.class);
+                        Bundle b = new Bundle();
+                        b.putString("Ticker", ticker_selected);
+                        stock_activity.putExtras(b);
+                        startActivity(stock_activity);
+                    }
+                });
             }
 
             @Override

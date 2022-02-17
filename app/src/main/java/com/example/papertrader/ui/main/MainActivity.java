@@ -25,11 +25,6 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button logout_button;
-    private Button api_test_button;
-//    private LoginViewModel loginViewModel;
-    public ApiConnection apiConnection;
-//    private ApiConnection apiConnection;
     private BottomNavigationView bottomNav;
 
     private static final String TAG_FRAGMENT_MARKET = "fragment_market";
@@ -54,13 +49,6 @@ public class MainActivity extends AppCompatActivity {
         bottomNav.setSelectedItemId(R.id.nav_market);
 
 
-
-
-
-//        System.out.println("Market fragment set...");
-//        System.out.println(marketFragment.toString());
-//        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
-//                .get(LoginViewModel.class);
 
 
 
