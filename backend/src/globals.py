@@ -24,6 +24,7 @@ def initialize():
         'pool_reset_on_return': 'commit',
         'pool_timeout': 5  # try a low value here maybe
     }
+    app.config['JSON_SORT_KEYS'] = False
 
     db = SQLAlchemy(app)
 

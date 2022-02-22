@@ -16,6 +16,14 @@ def get_stock_price(client, ticker):
     return stock_price
 
 
+def past_transactions(uid):
+    past_transactions = PastTransaction.query.filter_by(uid=uid).limit(15)
+    output = [i.serialize for i in past_transactions.all()]
+    print("OUTPUT: ", output)
+
+    return output
+
+
 def get_stock_info_by_ticker(ticker):
     try:
         ticker = ticker.upper()
@@ -23,9 +31,9 @@ def get_stock_info_by_ticker(ticker):
         stock = Stock.query.filter_by(ticker=ticker)
         output = stock.first().serialize
 
+        output['recommendationKey'] = info['recommendationKey']
         output['bid'] = info['bid']
         output['ask'] = info['ask']
-        output['recommendationKey'] = info['recommendationKey']
         output['open'] = info['open']
         output['high'] = info['dayHigh']
         output['low'] = info['dayLow']
@@ -37,6 +45,7 @@ def get_stock_info_by_ticker(ticker):
         output['avg_volume'] = info['averageVolume']
         output['div_yield'] = info['dividendYield']
 
+        print("OUTPUT: ", output)
         return output
 
     except Exception as e:

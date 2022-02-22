@@ -60,5 +60,28 @@
     <string name="stock_buy">BUY</string>
     <string name="stock_sell">SELL</string>
 
+    <!-- Strings for stock stat names  -->
+    <string name="_52w_high">52w High</string>
+    <string name="_52w_low">52w Low</string>
+    <string name="_ask">Ask</string>
+    <string name="_avg_volume">Avg. Vol</string>
+    <string name="_bid">Bid</string>
+    <string name="_country">Country</string>
+    <string name="_currency">Currency</string>
+    <string name="_div_yield">Div. Yield</string>
+    <string name="_exchange">Exchange</string>
+    <string name="_high">Day High</string>
+    <string name="_low">Day Low</string>
+    <string name="_mkt_cap">Market Cap</string>
+    <string name="_industry">Industry</string>
+    <string name="_open">Open</string>
+    <string name="_price_earnings">P/E</string>
+    <string name="_recommendationKey">Tip</string>
+    <string name="_sector">Sector</string>
+    <string name="_volume">Volume</string>
+
+    <string name="past_transactions">Past Transactions</string>
+
+
 
 </resources>

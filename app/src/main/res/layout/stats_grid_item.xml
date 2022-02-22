@@ -14,9 +14,9 @@
         android:layout_height="wrap_content"
         android:text="ASK:"
         android:textColor="@color/lightGrey"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textStyle="bold"
-
+        android:gravity="center"
         />
 
     <TextView
@@ -27,6 +27,7 @@
         android:textColor="@color/lightBlue"
         android:textSize="12sp"
         android:textStyle="bold"
+        android:gravity="center"
         />
 
 

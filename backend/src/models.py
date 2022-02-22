@@ -30,6 +30,17 @@ class PastTransaction(db.Model):
         self.price_per_stock = price_per_stock
         self.total_value = total_value
 
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            'ticker': self.ticker,
+            'type': self.type,
+            'stock_amount': self.stock_amount,
+            'price_per_stock': self.price_per_stock,
+            'total_value': self.total_value
+        }
+
     def __repr__(self):
         return '<Transaction %r>' % self.transaction_id
 

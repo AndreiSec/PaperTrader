@@ -56,7 +56,9 @@
             android:text="TIKR"
             android:textColor="@color/lightGrey"
             android:textSize="30dp"
-            android:textStyle="bold" />
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"/>
 
     </LinearLayout>
 
@@ -70,6 +72,7 @@
         android:textColor="@color/lightGrey"
         android:textSize="14dp"
         android:textStyle="italic"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
@@ -80,12 +83,12 @@
         android:layout_height="350dp"
         android:numColumns="3"
         android:gravity="center"
-        android:verticalSpacing="12dp"
+        android:verticalSpacing="16dp"
         android:horizontalSpacing="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/stockStatName"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="40dp"
         />
 
     <Button
@@ -98,6 +101,7 @@
         android:layout_marginBottom="16dp"
         android:backgroundTint="#FFFFFF"
         android:elevation="10dp"
+        android:gravity="center"
         android:fontFamily="@font/gotham_rounded_bold"
         android:text="@string/stock_buy"
         android:textColor="@color/lightBlue"
@@ -117,6 +121,7 @@
         android:layout_marginEnd="48dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="#FFFFFF"
+        android:gravity="center"
         android:elevation="10dp"
         android:fontFamily="@font/gotham_rounded_bold"
         android:text="@string/stock_sell"

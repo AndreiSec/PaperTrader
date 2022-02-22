@@ -225,6 +225,19 @@ def get_all_stock_info():
         cleanup()
 
 
+@app.route('/api/account/pasttransactions/<uid>', methods=['GET'])
+def get_past_transactions(uid):
+    try:
+        print("HERE 0")
+        output = past_transactions(uid)
+        return {"success": 'true', 'past_transactions': output}
+    except Exception as e:
+        print("Error " + e)
+        return {"success": 'false', "message": str(e)}
+    finally:
+        cleanup()
+
+
 if __name__ == "__main__":
 
     app.run()

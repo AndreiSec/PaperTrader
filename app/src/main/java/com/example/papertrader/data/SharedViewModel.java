@@ -1,12 +1,9 @@
 package com.example.papertrader.data;
 
-import android.view.View;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.papertrader.R;
 import com.example.papertrader.api.ApiConnection;
 import com.example.papertrader.api.ResponseCallBack;
 
@@ -15,7 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class SharedViewModel extends ViewModel {
@@ -23,7 +19,54 @@ public class SharedViewModel extends ViewModel {
     private MutableLiveData<List<JSONObject>> market_stocks = null;
     private MutableLiveData<List<JSONObject>> holdings_stocks = null;
     private MutableLiveData<JSONObject> stock_info = null;
+    private MutableLiveData<List<JSONObject>> past_transactions = null;
     private final ApiConnection apiConnection = ApiConnection.getInstance();
+
+
+    public LiveData<List<JSONObject>> get_past_transactions(String authToken) {
+
+        if (past_transactions == null) {
+            past_transactions = new MutableLiveData<List<JSONObject>>();
+            loadPastTransactions(authToken);
+        }
+
+        return past_transactions;
+    }
+
+    private void loadPastTransactions(String authToken) {
+        // Get past transactions associated with the auth token
+        apiConnection.get_past_transactions(new ResponseCallBack() {
+
+            @Override
+            public void getJsonResponse(JSONObject json) {
+                String jsonString = json.toString();
+                System.out.println("RESPONSE:");
+                System.out.println(jsonString);
+
+                List<JSONObject> temp_transactions_list = new ArrayList<JSONObject>();
+
+                JSONArray jArray = null;
+                try {
+                    jArray = (JSONArray)json.get("past_transactions");
+
+                    if (jArray != null) {
+                        for (int i=0;i<jArray.length();i++){
+                            temp_transactions_list.add((JSONObject) jArray.get(i));
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
+                past_transactions.postValue(temp_transactions_list);
+
+
+            }
+        }, authToken);
+    }
 
     public MutableLiveData<JSONObject> getStockInfo(String authToken, String ticker) {
 

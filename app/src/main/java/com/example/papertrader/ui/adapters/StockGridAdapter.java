@@ -1,6 +1,7 @@
 package com.example.papertrader.ui.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,16 +45,20 @@ public class StockGridAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        System.out.println("SETTING: " + stat_names.get(position));
-//        convertView = inflater.inflate(R.layout.stats_grid_item, null); // inflate the layout
         if (convertView == null) {
             final LayoutInflater layoutInflater = LayoutInflater.from(context);
             convertView = layoutInflater.inflate(R.layout.stats_grid_item, null);
             TextView statName = (TextView) convertView.findViewById(R.id.stockStatName);
             TextView statValue = (TextView) convertView.findViewById(R.id.stockStatValue);
 
-            statName.setText(stat_names.get(position));
-            statValue.setText((stat_values.get(position)));
+            String string_name_key = "_" + stat_names.get(position);
+            int name_resId = context.getResources().getIdentifier(string_name_key, "string", context.getPackageName());
+            String name = context.getString(name_resId);
+            statName.setText(name);
+            String stat_value = stat_values.get(position);
+
+            if(stat_value.equals("null")) stat_value = "N/A";
+            statValue.setText(stat_value);
         }
 
 
