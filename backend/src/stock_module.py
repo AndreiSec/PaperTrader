@@ -7,6 +7,7 @@ import yfinance as yf
 from models import *
 from flask import jsonify
 import asyncio
+from decimal import Decimal
 
 
 def get_stock_price(client, ticker):
@@ -17,11 +18,124 @@ def get_stock_price(client, ticker):
 
 
 def past_transactions(uid):
-    past_transactions = PastTransaction.query.filter_by(uid=uid).limit(15)
+    past_transactions = PastTransaction.query.filter_by(
+        uid=uid).order_by(PastTransaction.transaction_id.desc()).limit(15)
     output = [i.serialize for i in past_transactions.all()]
-    print("OUTPUT: ", output)
 
     return output
+
+
+def user_balance(uid):
+    user = User.query.filter_by(uid=uid).first()
+    balance = float(user.balance)
+
+    return balance
+
+
+def buy(finnhub_client, uid, ticker, stock_amount):
+    price_per_stock = get_stock_price(finnhub_client, ticker)
+    total_cash = stock_amount * price_per_stock
+
+    # First, check if user has enough funds to complete this transaction
+    user = User.query.filter_by(uid=uid).first()
+    # In this case, not enough cash to complete transaction
+    if user.balance < total_cash:
+        return_message = 'Insufficient funds to complete transaction'
+        return {"success": 'false', "message": return_message}
+    # In the case that user has enough funds, continue
+
+    # Next, check if user already owns this stock. If not, create an entry into the table
+    stock_entry = OwnedStock.query.filter_by(
+        uid=uid, ticker=ticker).first()
+
+    if stock_entry is None:  # In the case that we need to create the entry
+        new_owned_stock_entry = OwnedStock(
+            uid, ticker, stock_amount, price_per_stock, total_cash)
+        db.session.add(new_owned_stock_entry)
+    else:  # In this case must update existing average price per stock
+        old_total_cash = Decimal(stock_entry.total_value)
+        new_total_cash = Decimal(total_cash)
+        total_units = stock_entry.amount_owned + stock_amount
+        new_average_price = (
+            old_total_cash + new_total_cash) / Decimal(total_units)
+        print("Total amount of units: ", total_units)
+        print("Total value of units: ", (old_total_cash + new_total_cash))
+        print("New Average Price: ", new_average_price)
+        stock_entry.average_price_per_stock = Decimal(new_average_price)
+        stock_entry.amount_owned = total_units
+        stock_entry.total_value = (old_total_cash + new_total_cash)
+        db.session.merge(stock_entry)
+
+        # Next, create a past transaction to store in db
+    past_transaction = PastTransaction(
+        "buy", uid, ticker, stock_amount, price_per_stock, total_value=total_cash)
+
+    db.session.add(past_transaction)
+
+    # Finally update user cash balance
+    user.balance = user.balance - Decimal(total_cash)
+    db.session.merge(user)
+
+    # Commit all changes simultaneously
+    db.session.commit()
+    return_message = "Buy" + " of " + str(stock_amount) + \
+        ' ' + ticker + " at $" + str(price_per_stock) + \
+        " totaling $" + '{0:.2f}'.format(float(total_cash)) + " successful "
+    return {"success": 'true', 'message': return_message}
+
+
+def sell(finnhub_client, uid, ticker, stock_amount):
+    user = User.query.filter_by(uid=uid).first()
+
+    # First, check if this amount exists in the database
+
+    stock_entry = OwnedStock.query.filter_by(
+        uid=uid, ticker=ticker).first()
+
+    if stock_entry is None:
+        return_message = 'You do not currently own this stock.'
+        return {"success": 'false', 'message': return_message}
+
+    if stock_entry.amount_owned < stock_amount:
+        return_message = 'You cannot sell more stock than you currently own.'
+        return {"success": 'false', 'message': return_message}
+
+    # Needed to determine which database entry to sell; which price entry
+    stock_price = get_stock_price(finnhub_client, ticker)
+
+    total_cash = stock_amount * stock_price
+
+    # Next if possible to sell that amount of stock, facilitate the transaction
+
+    value_sold = stock_entry.average_price_per_stock * \
+        Decimal(stock_amount)
+    stock_entry.amount_owned = stock_entry.amount_owned - stock_amount
+    stock_entry.total_value = stock_entry.total_value - value_sold
+
+    if(stock_entry.amount_owned == 0):
+        db.session.delete(stock_entry)
+        db.session.commit()
+    else:
+        db.session.merge(stock_entry)
+
+    # First, create a past transaction to store in db
+    past_transaction = PastTransaction(
+        "sell", uid, ticker, stock_amount, stock_price, total_value=total_cash)
+
+    db.session.add(past_transaction)
+
+    # Finally update user cash balance
+
+    user.balance = user.balance + Decimal(total_cash)
+
+    db.session.merge(user)
+
+    # Commit all changes simultaneously
+    db.session.commit()
+    return_message = "Sell" + " of " + str(stock_amount) + \
+        ' ' + ticker + " at $" + str(stock_price) + \
+        " totaling $" + '{0:.2f}'.format(float(total_cash)) + " successful "
+    return {"success": 'true', 'message': return_message}
 
 
 def get_stock_info_by_ticker(ticker):

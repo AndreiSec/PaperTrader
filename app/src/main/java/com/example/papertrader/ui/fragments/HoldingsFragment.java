@@ -12,6 +12,7 @@ import android.widget.ListView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.papertrader.R;
 import com.example.papertrader.data.SharedViewModel;
@@ -32,14 +33,28 @@ import objects.MarketStockObject;
 public class HoldingsFragment extends Fragment {
     private ArrayList<HoldingsStockObject> holdingStockObjects;
     private AuthHandler authHandler;
-
+    SharedViewModel model;
+    private SwipeRefreshLayout refreshLayout;
     public ListView holdingsStocksListView;
 
-    public HoldingsFragment(){
+
+
+    private HoldingsFragment(){
 
     }
 
+    private static HoldingsFragment instance;
 
+    public static HoldingsFragment getInstance(){
+        if(instance == null)
+            instance = new HoldingsFragment();
+
+        return instance;
+    }
+
+    public void deleteInstance(){
+        instance = null;
+    }
 
 
     @Override
@@ -49,7 +64,7 @@ public class HoldingsFragment extends Fragment {
 
         holdingsStocksListView = view.findViewById(R.id.holdingsListView);
 
-            SharedViewModel model = new ViewModelProvider(this).get(SharedViewModel.class);
+            model = new ViewModelProvider(this).get(SharedViewModel.class);
             model.getHoldingsStocks(authHandler.getAuthToken()).observe(getViewLifecycleOwner(), holdingStocks -> {
                 String jsonString = holdingStocks.toString();
                 System.out.println(jsonString);
@@ -79,7 +94,27 @@ public class HoldingsFragment extends Fragment {
             }
         });
 
+        refreshLayout = view.findViewById(R.id.refreshLayout);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                model.getHoldingsStocks(authHandler.getAuthToken()).observe(getViewLifecycleOwner(), holdingStocks -> {
+                    String jsonString = holdingStocks.toString();
+                    System.out.println(jsonString);
 
+
+                    holdingStockObjects = new ArrayList<HoldingsStockObject>();
+
+                    for(JSONObject stockJson: holdingStocks)
+                        holdingStockObjects.add(new HoldingsStockObject(stockJson));
+
+                    HoldingsStockListAdapter adapter = new HoldingsStockListAdapter(view.getContext(), R.layout.holdings_list_item, holdingStockObjects);
+                    holdingsStocksListView.setAdapter(adapter);
+                    view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                    refreshLayout.setRefreshing(false);
+                });
+            }
+        });
 
     }
 

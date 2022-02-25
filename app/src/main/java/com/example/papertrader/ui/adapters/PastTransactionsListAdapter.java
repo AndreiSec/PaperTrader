@@ -55,6 +55,12 @@ public class PastTransactionsListAdapter extends ArrayAdapter<PastTransactionObj
 
         tickerTextView.setText(ticker);
         typeTextView.setText(type);
+        if(type.equals("Buy")){
+            typeTextView.setTextColor(getContext().getResources().getColor(R.color.lightBlue));
+        }
+        else{
+            typeTextView.setTextColor(getContext().getResources().getColor(R.color.darkBlue));
+        }
         stockAmountTextView.setText(stock_amount);
         pricePerStockTextView.setText(String.valueOf(price_per_stock));
         totalValueTextView.setText(String.valueOf(total_value));

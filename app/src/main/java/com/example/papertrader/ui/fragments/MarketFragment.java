@@ -41,6 +41,8 @@ public class MarketFragment extends Fragment {
 
     private ArrayList<MarketStockObject> marketStockObjects;
 
+    private ArrayList<MarketStockObject> filtered_stocks;
+
     public ListView marketStocksListView;
 
 
@@ -92,19 +94,19 @@ public class MarketFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                ArrayList<MarketStockObject> filteredStocks = new ArrayList<MarketStockObject>();
+                filtered_stocks = new ArrayList<MarketStockObject>();
                 s = s.toString().toLowerCase();
                 for(MarketStockObject stock:marketStockObjects){
                     // A string to perform searching on so all the stock fields are scanned
                     String searchString = stock.getCompanyName() + " " + stock.getCountry() + " " + stock.getCurrency() + " " + stock.getExchange() + " " + stock.getIndustry() + " " + stock.getSector() + " " + stock.getTicker();
                     searchString = searchString.toLowerCase();
                     if(searchString.contains(s)){
-                        filteredStocks.add(stock);
+                        filtered_stocks.add(stock);
                     }
 
                 }
 
-                MarketStockListAdapter adapter = new MarketStockListAdapter(getContext(), R.layout.market_list_item, filteredStocks);
+                MarketStockListAdapter adapter = new MarketStockListAdapter(getContext(), R.layout.market_list_item, filtered_stocks);
                 marketStocksListView.setAdapter(adapter);
 
 
@@ -151,6 +153,7 @@ public class MarketFragment extends Fragment {
                     marketStockObjects.add(new MarketStockObject(stockJson));
 
                 MarketStockListAdapter adapter = new MarketStockListAdapter(this.getContext(), R.layout.market_list_item, marketStockObjects);
+                filtered_stocks = marketStockObjects;
                 marketStocksListView.setAdapter(adapter);
             });
         }
@@ -166,7 +169,7 @@ public class MarketFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 System.out.println("CLICKED!!!");
-                String ticker_selected = marketStockObjects.get(position).getTicker();
+                String ticker_selected = filtered_stocks.get(position).getTicker();
 
                 Intent stock_activity = new Intent(getActivity(), StockActivity.class);
                 Bundle b = new Bundle();

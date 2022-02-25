@@ -16,12 +16,19 @@ public class PastTransactionObject implements Parcelable {
 
     public PastTransactionObject(JSONObject transactionJSON) {
         try{
-            System.out.println("TRANSACTION JSON: ");
             this.ticker = (String) transactionJSON.get("ticker");
-            this.type = (String) transactionJSON.get("type");
+            String type = (String) transactionJSON.get("type");
+            if(type.equals("buy")){
+                this.type = "Buy";
+            }else{
+                this.type = "Sell";
+            }
+
+            Float pricePerStock = Float.valueOf((String) transactionJSON.get("price_per_stock"));
+            Float totalValue = Float.valueOf((String) transactionJSON.get("total_value"));
             this.stock_amount = (Integer) transactionJSON.get("stock_amount");
-            this.price_per_stock = (String) transactionJSON.get("price_per_stock");
-            this.total_value = (String) transactionJSON.get("total_value");
+            this.price_per_stock = String.format("%.02f", pricePerStock);
+            this.total_value = String.format("%.02f", totalValue);
         }
         catch(Exception e){
             e.printStackTrace();

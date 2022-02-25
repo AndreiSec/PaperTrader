@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_FRAGMENT_ACCOUNT = "fragment_account";
 
     private final MarketFragment marketFragment = MarketFragment.getInstance();
+    private final HoldingsFragment holdingsFragment = HoldingsFragment.getInstance();
+    private final AccountFragment accountFragment = AccountFragment.getInstance();
 
     private FragmentManager fragmentManager;
     private Fragment currentFragment;
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         System.out.println("Main Activity Stopping..");
         marketFragment.deleteInstance();
+        holdingsFragment.deleteInstance();
 
     }
 
@@ -91,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_holdings:
                     fragment = fragmentManager.findFragmentByTag(TAG_FRAGMENT_HOLDINGS);
                     if (fragment == null) {
-                        fragment = new HoldingsFragment();
+                        fragment = HoldingsFragment.getInstance();
                     }
                     replaceFragment(fragment, TAG_FRAGMENT_HOLDINGS);
                     break;
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_account:
                     fragment = fragmentManager.findFragmentByTag(TAG_FRAGMENT_ACCOUNT);
                     if (fragment == null) {
-                        fragment = new AccountFragment();
+                        fragment = AccountFragment.getInstance();
                     }
                     replaceFragment(fragment, TAG_FRAGMENT_ACCOUNT);
                     break;

@@ -20,16 +20,48 @@ public class SharedViewModel extends ViewModel {
     private MutableLiveData<List<JSONObject>> holdings_stocks = null;
     private MutableLiveData<JSONObject> stock_info = null;
     private MutableLiveData<List<JSONObject>> past_transactions = null;
+    private MutableLiveData<Float> user_balance = null;
     private final ApiConnection apiConnection = ApiConnection.getInstance();
+
+    public LiveData<Float> get_user_balance(String authToken) {
+        if (user_balance == null) {
+            user_balance = new MutableLiveData<Float>();
+
+        }
+        loadUserBalance(authToken);
+        return user_balance;
+    }
+
+    private void loadUserBalance(String authToken) {
+        // Get past transactions associated with the auth token
+        apiConnection.get_user_balance(new ResponseCallBack() {
+
+            @Override
+            public void getJsonResponse(JSONObject json) {
+                String jsonString = json.toString();
+                float balance = 0;
+                try {
+                    balance = (float) (double) json.get("user_balance");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+                user_balance.postValue(balance);
+
+
+            }
+        }, authToken);
+    }
 
 
     public LiveData<List<JSONObject>> get_past_transactions(String authToken) {
 
         if (past_transactions == null) {
             past_transactions = new MutableLiveData<List<JSONObject>>();
-            loadPastTransactions(authToken);
-        }
 
+        }
+        loadPastTransactions(authToken);
         return past_transactions;
     }
 
@@ -40,8 +72,6 @@ public class SharedViewModel extends ViewModel {
             @Override
             public void getJsonResponse(JSONObject json) {
                 String jsonString = json.toString();
-                System.out.println("RESPONSE:");
-                System.out.println(jsonString);
 
                 List<JSONObject> temp_transactions_list = new ArrayList<JSONObject>();
 
@@ -72,9 +102,9 @@ public class SharedViewModel extends ViewModel {
 
         if (stock_info == null) {
             stock_info = new MutableLiveData<JSONObject>();
-            loadStockInfo(authToken, ticker);
-        }
 
+        }
+        loadStockInfo(authToken, ticker);
         return stock_info;
     }
 
@@ -101,8 +131,9 @@ public class SharedViewModel extends ViewModel {
     public LiveData<List<JSONObject>> getHoldingsStocks(String authToken) {
         if (holdings_stocks == null) {
             holdings_stocks = new MutableLiveData<List<JSONObject>>();
-            loadHoldingStocks(authToken);
+
         }
+        loadHoldingStocks(authToken);
         return holdings_stocks;
     }
 
@@ -146,8 +177,9 @@ public class SharedViewModel extends ViewModel {
     public LiveData<List<JSONObject>> getMarketStocks() {
         if (market_stocks == null) {
             market_stocks = new MutableLiveData<List<JSONObject>>();
-            loadMarketStocks();
+
         }
+        loadMarketStocks();
         return market_stocks;
     }
 
