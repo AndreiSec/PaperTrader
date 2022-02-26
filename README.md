@@ -7,7 +7,7 @@ PaperTrader is a full-stack stock trading Android app developed with Android Stu
 ## Images
 
 <details>
-  <summary>Front-End Images</summary><details>
+  <summary>Front-End Images</summary>
   <img src="images/mainscreen.png" name="Landing Page">
   <img src="images/signin.png" name="Login">
   <img src="images/register.png" name="Register">
